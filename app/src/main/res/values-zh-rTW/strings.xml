@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Fruit2048</string>
+
+    <!-- Game screen -->
+    <string name="title_subtitle">水果版！</string>
+    <string name="best_score">最高分</string>
+    <string name="current_score">目前分數</string>
+    <string name="new_game">新遊戲</string>
+    <string name="undo">復原</string>
+    <string name="restart">重新開始</string>
+    <string name="game_over">遊戲結束！</string>
+    <string name="final_score">最終分數：%1$d</string>
+    <string name="try_again">再試一次</string>
+    <string name="congratulation">恭喜！！！</string>
+    <string name="new_best_score">新紀錄：%1$d</string>
+    <string name="close">關閉</string>
+    <string name="confirm">確認</string>
+    <string name="restart_confirm_message">確定要重新開始遊戲嗎？</string>
+    <string name="cancel">取消</string>
+
+    <!-- Landing / settings -->
+    <string name="start_game">開始遊戲</string>
+    <string name="continue_game">繼續遊戲</string>
+    <string name="back">返回</string>
+    <string name="settings">設定</string>
+    <string name="difficulty">難度</string>
+    <string name="difficulty_easy">簡單</string>
+    <string name="difficulty_normal">普通</string>
+    <string name="difficulty_hard">困難</string>
+    <string name="sound">音效</string>
+    <string name="language">語言</string>
+
+    <string name="lang_english">English</string>
+    <string name="lang_traditional_chinese">繁體中文</string>
+    <string name="lang_simplified_chinese">简体中文</string>
+</resources>

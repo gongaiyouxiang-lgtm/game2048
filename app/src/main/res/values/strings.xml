@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">Fruit2048</string>
+
+    <!-- Game screen -->
+    <string name="title_subtitle">Fruit Edition!</string>
+    <string name="best_score">Best Score</string>
+    <string name="current_score">Current Score</string>
+    <string name="new_game">New Game</string>
+    <string name="undo">Undo</string>
+    <string name="restart">Restart</string>
+    <string name="game_over">Game Over!</string>
+    <string name="final_score">Final score: %1$d</string>
+    <string name="try_again">Try Again</string>
+    <string name="congratulation">Congratulation!!!</string>
+    <string name="new_best_score">New Best Score: %1$d</string>
+    <string name="close">Close</string>
+    <string name="confirm">Confirm</string>
+    <string name="restart_confirm_message">Are you sure to restart the game?</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Landing / settings -->
+    <string name="start_game">Start Game</string>
+    <string name="continue_game">Continue</string>
+    <string name="back">Back</string>
+    <string name="settings">Settings</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="difficulty_easy">Easy</string>
+    <string name="difficulty_normal">Normal</string>
+    <string name="difficulty_hard">Hard</string>
+    <string name="sound">Sound</string>
+    <string name="language">Language</string>
+
+    <!-- Language names stay in their own script across all locales -->
+    <string name="lang_english">English</string>
+    <string name="lang_traditional_chinese">繁體中文</string>
+    <string name="lang_simplified_chinese">简体中文</string>
+</resources>

@@ -1,13 +1,12 @@
 package com.codebythura.fruit2048.database
 
-import androidx.room.TypeConverter
 import com.codebythura.fruit2048.data.GRID_SIZE
 import com.codebythura.fruit2048.data.GridData
 import com.codebythura.fruit2048.data.GridMatrix
 
+/** Serializes a board to/from a compact string. Plain Kotlin (KMP-friendly, no Room). */
 class GridConverter {
 
-    @TypeConverter
     fun fromBoard(grid: GridMatrix): String {
         val size = grid.size
         val result = mutableListOf<String>()
@@ -21,7 +20,6 @@ class GridConverter {
         return "$size;" + result.joinToString(":")
     }
 
-    @TypeConverter
     fun toBoard(json: String): GridMatrix {
         val trimmed = json.trim()
         val separatorIndex = trimmed.indexOf(';')
@@ -35,5 +33,4 @@ class GridConverter {
         }
         return grid
     }
-
 }

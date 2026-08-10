@@ -1,8 +1,7 @@
 package com.codebythura.fruit2048.repository
 
 import androidx.datastore.core.DataStore
-import com.codebythura.fruit2048.AppData
-import com.codebythura.fruit2048.copy
+import com.codebythura.fruit2048.data.AppData
 import com.codebythura.fruit2048.data.GRID_SIZE
 import com.codebythura.fruit2048.data.GridMatrix
 import com.codebythura.fruit2048.database.GridConverter
@@ -45,12 +44,12 @@ class DataStoreRepositoryImpl @Inject constructor(private val datastore: DataSto
     override suspend fun updateBestScoreIfNecessary(newScore: Int): Boolean =
         withContext(Dispatchers.IO) {
             var updated = false
-            datastore.updateData { currentData ->
-                currentData.copy {
-                    if (newScore > bestScore) {
-                        bestScore = newScore
-                        updated = true
-                    }
+            datastore.updateData { current ->
+                if (newScore > current.bestScore) {
+                    updated = true
+                    current.copy(bestScore = newScore)
+                } else {
+                    current
                 }
             }
             return@withContext updated
@@ -62,7 +61,7 @@ class DataStoreRepositoryImpl @Inject constructor(private val datastore: DataSto
         .flowOn(Dispatchers.IO)
 
     override suspend fun setGridSize(size: Int) = withContext(Dispatchers.IO) {
-        datastore.updateData { it.copy { gridSize = size } }
+        datastore.updateData { it.copy(gridSize = size) }
         Unit
     }
 
@@ -72,7 +71,7 @@ class DataStoreRepositoryImpl @Inject constructor(private val datastore: DataSto
         .flowOn(Dispatchers.IO)
 
     override suspend fun setSoundEnabled(enabled: Boolean) = withContext(Dispatchers.IO) {
-        datastore.updateData { it.copy { soundMuted = !enabled } }
+        datastore.updateData { it.copy(soundMuted = !enabled) }
         Unit
     }
 
@@ -82,7 +81,7 @@ class DataStoreRepositoryImpl @Inject constructor(private val datastore: DataSto
         .flowOn(Dispatchers.IO)
 
     override suspend fun setVibrationEnabled(enabled: Boolean) = withContext(Dispatchers.IO) {
-        datastore.updateData { it.copy { vibrationMuted = !enabled } }
+        datastore.updateData { it.copy(vibrationMuted = !enabled) }
         Unit
     }
 
@@ -92,11 +91,11 @@ class DataStoreRepositoryImpl @Inject constructor(private val datastore: DataSto
         withContext(Dispatchers.IO) {
             val serialized = gridConverter.fromBoard(board)
             datastore.updateData {
-                it.copy {
-                    currentBoard = serialized
-                    currentScore = score
-                    currentGridSize = gridSize
-                }
+                it.copy(
+                    currentBoard = serialized,
+                    currentScore = score,
+                    currentGridSize = gridSize,
+                )
             }
             Unit
         }
@@ -112,7 +111,7 @@ class DataStoreRepositoryImpl @Inject constructor(private val datastore: DataSto
     }
 
     override suspend fun clearCurrentGame() = withContext(Dispatchers.IO) {
-        datastore.updateData { it.copy { currentBoard = "" } }
+        datastore.updateData { it.copy(currentBoard = "") }
         Unit
     }
 

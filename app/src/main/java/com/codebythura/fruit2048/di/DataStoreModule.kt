@@ -21,6 +21,6 @@ object DataStoreModule {
     fun provideBestScoreDataStore(@ApplicationContext context: Context) =
         DataStoreFactory.create(
             serializer = AppDataSerializer,
-            produceFile = { context.dataStoreFile("app_data.pb") }
+            produceFile = { context.dataStoreFile("app_data.json") }
         )
 }

@@ -1,14 +1,9 @@
 package com.codebythura.fruit2048.database
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.codebythura.fruit2048.data.GridMatrix
 
-@Entity(tableName = "game_state")
+/** One undo-stack entry: a board plus its score. (Plain data class, no longer a Room entity.) */
 data class GameStateEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id : Int = 0,
-    val state : GridMatrix,
-    val score : Int,
+    val state: GridMatrix,
+    val score: Int,
 )
-

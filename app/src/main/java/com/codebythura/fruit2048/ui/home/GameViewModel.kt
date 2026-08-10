@@ -13,6 +13,7 @@ import com.codebythura.fruit2048.data.TileData
 import com.codebythura.fruit2048.data.emptyGrid
 import com.codebythura.fruit2048.database.GameStateEntity
 import com.codebythura.fruit2048.util.SoundManager
+import com.codebythura.fruit2048.util.VibrationManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -64,13 +65,14 @@ class GameViewModel @Inject constructor(
     private val gameStateRepo: GameStateRepository,
     private val dataStoreRepo: DataStoreRepository,
     private val soundManager: SoundManager,
+    private val vibrationManager: VibrationManager,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val gridSize: Int = savedStateHandle.get<Int>(GRID_SIZE_ARG)?.takeIf { it > 0 } ?: GRID_SIZE
     private val resume: Boolean = savedStateHandle.get<Boolean>(RESUME_ARG) ?: false
 
-    private var soundEnabled = true
+    private var vibrationEnabled = true
 
     private val _gameState = MutableStateFlow(GameState(gridData = emptyGrid(gridSize)))
     val uiState = combine(
@@ -94,8 +96,8 @@ class GameViewModel @Inject constructor(
     )
 
     init {
-        dataStoreRepo.observeSoundEnabled()
-            .onEach { soundEnabled = it }
+        dataStoreRepo.observeVibrationEnabled()
+            .onEach { vibrationEnabled = it }
             .launchIn(viewModelScope)
         if (resume) {
             viewModelScope.launch {
@@ -123,6 +125,7 @@ class GameViewModel @Inject constructor(
                 showNewScoreDialog = showNewScoreDialog,
             )
             _gameState.value = newState
+            if (showNewScoreDialog) soundManager.playWin()
             persist(newState)
         }
     }
@@ -150,14 +153,22 @@ class GameViewModel @Inject constructor(
                 Direction.UP -> GameLogic.swipeUp(_gameState.value.gridData)
                 Direction.DOWN -> GameLogic.swipeDown(_gameState.value.gridData)
             }
-            if (newScore > 0 && soundEnabled) {
+            val moved = swipedGrid != _gameState.value.gridData
+            if (newScore > 0) {
                 soundManager.playMerge()
+                if (vibrationEnabled) vibrationManager.vibrateMerge()
+            } else if (moved) {
+                soundManager.playSlide()
             }
+            val newGrid = GameLogic.addRandomData(swipedGrid)
             val newState = GameState(
-                gridData = GameLogic.addRandomData(swipedGrid),
+                gridData = newGrid,
                 score = _gameState.value.score + newScore
             )
             _gameState.value = newState
+            if (GameLogic.checkIfGameOver(newGrid)) {
+                soundManager.playGameOver()
+            }
             persist(newState)
         }
     }

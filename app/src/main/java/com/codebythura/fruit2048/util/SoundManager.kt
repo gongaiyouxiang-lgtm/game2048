@@ -1,36 +1,62 @@
 package com.codebythura.fruit2048.util
 
-import android.media.AudioManager
-import android.media.ToneGenerator
+import android.content.Context
+import android.media.AudioAttributes
+import android.media.SoundPool
+import com.codebythura.fruit2048.R
+import com.codebythura.fruit2048.repository.DataStoreRepository
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Plays short game sound effects. Uses [ToneGenerator] so no audio asset needs
- * to be bundled; this can later be swapped for SoundPool + real audio files.
- * Callers decide whether sound is enabled before invoking these methods.
+ * Plays short game sound effects via [SoundPool] (low latency, overlapping playback).
+ * Self-gated: reads the sound setting so callers just call the play methods.
  */
 @Singleton
-class SoundManager @Inject constructor() {
+class SoundManager @Inject constructor(
+    @ApplicationContext context: Context,
+    dataStoreRepo: DataStoreRepository,
+) {
+    @Volatile
+    private var enabled = true
 
-    private var toneGenerator: ToneGenerator? = null
+    private val soundPool: SoundPool = SoundPool.Builder()
+        .setMaxStreams(4)
+        .setAudioAttributes(
+            AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build()
+        )
+        .build()
 
-    private fun generator(): ToneGenerator? {
-        if (toneGenerator == null) {
-            toneGenerator = try {
-                ToneGenerator(AudioManager.STREAM_MUSIC, 80)
-            } catch (e: RuntimeException) {
-                null
-            }
-        }
-        return toneGenerator
+    private val mergeId = soundPool.load(context, R.raw.merge, 1)
+    private val slideId = soundPool.load(context, R.raw.slide, 1)
+    private val gameOverId = soundPool.load(context, R.raw.gameover, 1)
+    private val winId = soundPool.load(context, R.raw.win, 1)
+    private val clickId = soundPool.load(context, R.raw.click, 1)
+
+    init {
+        dataStoreRepo.observeSoundEnabled()
+            .onEach { enabled = it }
+            .launchIn(CoroutineScope(Dispatchers.Default))
     }
 
-    fun playMerge() {
-        try {
-            generator()?.startTone(ToneGenerator.TONE_PROP_BEEP, 120)
-        } catch (e: RuntimeException) {
-            // ToneGenerator can fail to allocate on some devices; ignore.
+    private fun play(soundId: Int, rate: Float = 1f) {
+        if (enabled && soundId != 0) {
+            soundPool.play(soundId, 1f, 1f, 1, 0, rate)
         }
     }
+
+    /** Merge sound; [rate] lets the pitch rise with the merged tile value. */
+    fun playMerge(rate: Float = 1f) = play(mergeId, rate)
+    fun playSlide() = play(slideId)
+    fun playGameOver() = play(gameOverId)
+    fun playWin() = play(winId)
+    fun playClick() = play(clickId)
 }

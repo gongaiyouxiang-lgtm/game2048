@@ -28,6 +28,8 @@ interface DataStoreRepository {
     suspend fun setGridSize(size: Int)
     fun observeSoundEnabled(): Flow<Boolean>
     suspend fun setSoundEnabled(enabled: Boolean)
+    fun observeVibrationEnabled(): Flow<Boolean>
+    suspend fun setVibrationEnabled(enabled: Boolean)
     suspend fun saveCurrentGame(board: GridMatrix, score: Int, gridSize: Int)
     suspend fun loadCurrentGame(): SavedGame?
     suspend fun clearCurrentGame()
@@ -71,6 +73,16 @@ class DataStoreRepositoryImpl @Inject constructor(private val datastore: DataSto
 
     override suspend fun setSoundEnabled(enabled: Boolean) = withContext(Dispatchers.IO) {
         datastore.updateData { it.copy { soundMuted = !enabled } }
+        Unit
+    }
+
+    // vibration_muted defaults to false, so vibration is enabled by default.
+    override fun observeVibrationEnabled() = datastore.data
+        .map { !it.vibrationMuted }
+        .flowOn(Dispatchers.IO)
+
+    override suspend fun setVibrationEnabled(enabled: Boolean) = withContext(Dispatchers.IO) {
+        datastore.updateData { it.copy { vibrationMuted = !enabled } }
         Unit
     }
 

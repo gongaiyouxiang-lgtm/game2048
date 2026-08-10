@@ -18,3 +18,6 @@ keystore.properties
 .cxx
 .kotlin
 local.properties
+
+# Raw audio sources (Adobe project + originals)
+/sound effect/

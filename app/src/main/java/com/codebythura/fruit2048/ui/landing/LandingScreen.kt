@@ -1,44 +1,41 @@
 package com.codebythura.fruit2048.ui.landing
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.codebythura.fruit2048.R
 import com.codebythura.fruit2048.ads.BannerAd
-import com.codebythura.fruit2048.ui.home.components.AppTitle
-import com.codebythura.fruit2048.util.LocaleManager
-import com.codebythura.fruit2048.util.findActivity
+import com.codebythura.fruit2048.util.rememberSoundManager
 
 private data class DifficultyOption(val size: Int, val labelRes: Int)
 
@@ -48,143 +45,158 @@ private val difficultyOptions = listOf(
     DifficultyOption(size = 3, labelRes = R.string.difficulty_hard),
 )
 
-private data class LanguageOption(val tag: String, val labelRes: Int)
+private val Primary = Color(0xFF176FE7)
+private val BlueTop = Color(0xFF5AA0FF)
+private val BlueBottom = Color(0xFF1466DA)
+private val TextDark = Color(0xFF1C1B1F)
+private val TextMuted = Color(0xFF6B6B70)
+private val Sheen = Brush.verticalGradient(listOf(Color(0x66FFFFFF), Color(0x00FFFFFF)))
+private val BlueFill = Brush.verticalGradient(listOf(BlueTop, BlueBottom))
 
-private val languageOptions = listOf(
-    LanguageOption(tag = "en", labelRes = R.string.lang_english),
-    LanguageOption(tag = "zh-TW", labelRes = R.string.lang_traditional_chinese),
-    LanguageOption(tag = "zh-CN", labelRes = R.string.lang_simplified_chinese),
-)
-
+/**
+ * Image-backed landing: the AI-generated [R.drawable.home_bg_art] provides the hero art in
+ * the top half; glossy, elevated Compose controls sit just below it in the lower area.
+ * Sound/vibration/language live in the Settings screen.
+ */
 @Composable
 fun LandingScreen(
     onStartGame: (gridSize: Int) -> Unit,
     onContinueGame: (gridSize: Int) -> Unit,
+    onOpenSettings: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: LandingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    var currentLanguage by remember { mutableStateOf(LocaleManager.getLanguage(context)) }
+    val sound = rememberSoundManager()
 
     Scaffold(
         modifier = modifier,
         bottomBar = { BannerAd() },
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 24.dp, vertical = 32.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp),
-        ) {
-            AppTitle()
+        Box(modifier = Modifier.fillMaxSize()) {
+            Image(
+                painter = painterResource(R.drawable.home_bg_art),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize(),
+            )
 
-            BestScoreBanner(bestScore = state.bestScore)
-
-            SettingSection(title = stringResource(R.string.difficulty)) {
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    difficultyOptions.forEach { option ->
-                        OptionCard(
-                            selected = state.gridSize == option.size,
-                            onClick = { viewModel.setDifficulty(option.size) },
-                        ) {
-                            Text(
-                                text = stringResource(option.labelRes),
-                                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
-                            )
-                            Text(
-                                text = "${option.size}×${option.size}",
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
-                        }
-                    }
-                }
-            }
-
-            SettingSection(title = stringResource(R.string.sound)) {
-                Surface(
-                    shape = RoundedCornerShape(12.dp),
-                    color = MaterialTheme.colorScheme.secondaryContainer,
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
-                            text = stringResource(R.string.sound),
-                            modifier = Modifier.weight(1f),
-                            style = MaterialTheme.typography.bodyLarge,
-                        )
-                        Switch(
-                            checked = state.soundEnabled,
-                            onCheckedChange = { viewModel.setSoundEnabled(it) },
-                        )
-                    }
-                }
-            }
-
-            SettingSection(title = stringResource(R.string.language)) {
-                Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    languageOptions.forEach { option ->
-                        OptionCard(
-                            selected = currentLanguage == option.tag,
-                            onClick = {
-                                if (currentLanguage != option.tag) {
-                                    LocaleManager.setLanguage(context, option.tag)
-                                    currentLanguage = option.tag
-                                    context.findActivity()?.recreate()
-                                }
-                            },
-                        ) {
-                            Text(
-                                text = stringResource(option.labelRes),
-                                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold),
-                            )
-                        }
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            if (state.hasActiveGame) {
-                Button(
-                    onClick = { onContinueGame(state.savedGridSize) },
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                ) {
-                    Text(
-                        text = stringResource(R.string.continue_game),
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                    )
-                }
-            }
-
-            val startButtonColors = if (state.hasActiveGame) {
-                ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.secondaryContainer,
-                    contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-                )
-            } else {
-                ButtonDefaults.buttonColors()
-            }
-            Button(
-                onClick = { onStartGame(state.gridSize) },
-                shape = RoundedCornerShape(12.dp),
-                colors = startButtonColors,
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(56.dp),
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 24.dp, vertical = 12.dp),
+            ) {
+                // Top overlay: best-score pill + settings gear
+                Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    Spacer(Modifier.weight(1f))
+                    BestScorePill(state.bestScore)
+                    Spacer(Modifier.size(8.dp))
+                    GearButton(onClick = { sound.playClick(); onOpenSettings() })
+                }
+
+                // Sit the controls just below the hero (lifted off the very bottom)
+                Spacer(Modifier.weight(1f))
+
+                SectionLabel(stringResource(R.string.difficulty))
+                DifficultySegmented(
+                    selected = state.gridSize,
+                    onSelect = { sound.playClick(); viewModel.setDifficulty(it) },
+                )
+
+                Spacer(Modifier.height(22.dp))
+                PlayButton { sound.playClick(); onStartGame(state.gridSize) }
+                if (state.hasActiveGame) {
+                    Spacer(Modifier.height(12.dp))
+                    ContinueButton { sound.playClick(); onContinueGame(state.savedGridSize) }
+                }
+
+                // Extra breathing room below so the block floats above the bottom
+                Spacer(Modifier.weight(0.3f))
+            }
+        }
+    }
+}
+
+@Composable
+private fun BestScorePill(bestScore: Int) {
+    Row(
+        modifier = Modifier
+            .shadow(6.dp, RoundedCornerShape(50), clip = false)
+            .clip(RoundedCornerShape(50))
+            .background(Color.White)
+            .padding(horizontal = 15.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text("🏆", fontSize = 15.sp)
+        Text("  $bestScore", color = TextDark, fontWeight = FontWeight.Bold, fontSize = 15.sp)
+    }
+}
+
+@Composable
+private fun GearButton(onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .size(42.dp)
+            .shadow(6.dp, RoundedCornerShape(50), clip = false)
+            .clip(RoundedCornerShape(50))
+            .background(Color.White)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text("⚙️", fontSize = 19.sp)
+    }
+}
+
+@Composable
+private fun SectionLabel(text: String) {
+    Text(
+        text = text,
+        color = Primary,
+        fontWeight = FontWeight.Bold,
+        fontSize = 13.sp,
+        letterSpacing = 0.8.sp,
+        modifier = Modifier.padding(top = 10.dp, bottom = 10.dp, start = 6.dp),
+    )
+}
+
+@Composable
+private fun DifficultySegmented(selected: Int, onSelect: (Int) -> Unit) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .shadow(6.dp, RoundedCornerShape(20.dp), clip = false)
+            .clip(RoundedCornerShape(20.dp))
+            .background(Color.White)
+            .padding(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+    ) {
+        difficultyOptions.forEach { option ->
+            val isSel = selected == option.size
+            val cellShape = RoundedCornerShape(15.dp)
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .then(
+                        if (isSel) Modifier.shadow(8.dp, cellShape, clip = false, spotColor = Primary)
+                        else Modifier
+                    )
+                    .clip(cellShape)
+                    .then(if (isSel) Modifier.background(BlueFill) else Modifier)
+                    .clickable { onSelect(option.size) }
+                    .padding(vertical = 12.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = stringResource(R.string.start_game),
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    text = stringResource(option.labelRes),
+                    color = if (isSel) Color.White else TextDark,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 15.sp,
+                )
+                Text(
+                    text = "${option.size}×${option.size}",
+                    color = if (isSel) Color(0xE6FFFFFF) else TextMuted,
+                    fontSize = 12.sp,
                 )
             }
         }
@@ -192,64 +204,56 @@ fun LandingScreen(
 }
 
 @Composable
-private fun BestScoreBanner(bestScore: Int) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.secondaryContainer,
+private fun PlayButton(onClick: () -> Unit) {
+    val shape = RoundedCornerShape(50)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(64.dp)
+            .shadow(14.dp, shape, clip = false, spotColor = Primary, ambientColor = Primary)
+            .clip(shape)
+            .background(BlueFill)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center,
     ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = stringResource(R.string.best_score),
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
-                modifier = Modifier.weight(1f),
-            )
-            Text(
-                text = bestScore.toString(),
-                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-            )
-        }
-    }
-}
-
-@Composable
-private fun SettingSection(
-    title: String,
-    content: @Composable ColumnScope.() -> Unit,
-) {
-    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text(
-            text = title,
-            color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+        // Glossy top highlight
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp, vertical = 5.dp)
+                .height(24.dp)
+                .clip(RoundedCornerShape(50))
+                .background(Sheen),
         )
-        content()
+        Text(
+            text = "▶  " + stringResource(R.string.start_game),
+            color = Color.White,
+            fontWeight = FontWeight.ExtraBold,
+            fontSize = 19.sp,
+            textAlign = TextAlign.Center,
+        )
     }
 }
 
 @Composable
-private fun RowScope.OptionCard(
-    selected: Boolean,
-    onClick: () -> Unit,
-    content: @Composable ColumnScope.() -> Unit,
-) {
-    Surface(
-        onClick = onClick,
-        modifier = Modifier.weight(1f),
-        shape = RoundedCornerShape(12.dp),
-        color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.secondaryContainer,
-        contentColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSecondaryContainer,
-        border = if (selected) null else BorderStroke(1.dp, MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)),
+private fun ContinueButton(onClick: () -> Unit) {
+    val shape = RoundedCornerShape(50)
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(50.dp)
+            .shadow(6.dp, shape, clip = false)
+            .clip(shape)
+            .background(Color.White)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center,
     ) {
-        Column(
-            modifier = Modifier.padding(vertical = 14.dp, horizontal = 8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(2.dp),
-            content = content,
+        Text(
+            text = stringResource(R.string.continue_game),
+            color = Primary,
+            fontWeight = FontWeight.Bold,
+            fontSize = 16.sp,
         )
     }
 }

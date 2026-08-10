@@ -12,9 +12,11 @@ import com.codebythura.fruit2048.ui.home.GRID_SIZE_ARG
 import com.codebythura.fruit2048.ui.home.GameScreen
 import com.codebythura.fruit2048.ui.home.RESUME_ARG
 import com.codebythura.fruit2048.ui.landing.LandingScreen
+import com.codebythura.fruit2048.ui.settings.SettingsScreen
 
 private const val ROUTE_LANDING = "landing"
 private const val ROUTE_GAME = "game"
+private const val ROUTE_SETTINGS = "settings"
 
 @Composable
 fun Fruit2048(modifier: Modifier = Modifier) {
@@ -32,7 +34,11 @@ fun Fruit2048(modifier: Modifier = Modifier) {
                 onContinueGame = { gridSize ->
                     navController.navigate("$ROUTE_GAME/$gridSize?$RESUME_ARG=true")
                 },
+                onOpenSettings = { navController.navigate(ROUTE_SETTINGS) },
             )
+        }
+        composable(ROUTE_SETTINGS) {
+            SettingsScreen(onBack = { navController.popBackStack() })
         }
         composable(
             route = "$ROUTE_GAME/{$GRID_SIZE_ARG}?$RESUME_ARG={$RESUME_ARG}",

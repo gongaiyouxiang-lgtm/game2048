@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -23,6 +24,9 @@ import androidx.compose.ui.unit.dp
 import com.codebythura.fruit2048.R
 
 private val buttonHeight = 50.dp
+private val OrangeBtn = Color(0xFFFF9F43)
+private val YellowBtn = Color(0xFFFFC93C)
+private val YellowContent = Color(0xFF6B4E00)
 
 @Composable
 fun ActionsRow(
@@ -59,7 +63,9 @@ fun UndoGameButton(
         enabled = enabled,
         onClick = onClick,
         modifier = modifier.size(buttonHeight),
-        contentPadding = PaddingValues(0.dp)
+        contentPadding = PaddingValues(0.dp),
+        containerColor = YellowBtn,
+        contentColor = YellowContent,
     ) {
         Icon(
             painter = painterResource(R.drawable.undo),
@@ -78,6 +84,8 @@ fun NewGameButton(
         enabled = enabled,
         onClick = onClick,
         modifier = modifier.height(48.dp),
+        containerColor = OrangeBtn,
+        contentColor = Color.White,
     ) {
         Row(
             modifier = modifier.fillMaxWidth(),
@@ -90,8 +98,8 @@ fun NewGameButton(
             )
             Text(
                 text = stringResource(R.string.new_game),
-                color = MaterialTheme.colorScheme.onPrimary,
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+                color = Color.White,
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
             )
         }
     }
@@ -103,17 +111,21 @@ private fun ActionButton(
     enabled: Boolean = true,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
+    containerColor: Color = MaterialTheme.colorScheme.primary,
+    contentColor: Color = MaterialTheme.colorScheme.onPrimary,
     content: @Composable RowScope.() -> Unit,
 ) {
     Button(
         onClick = onClick,
         enabled = enabled,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(14.dp),
         modifier = modifier,
         contentPadding = contentPadding,
         colors = ButtonDefaults.buttonColors(
-            disabledContainerColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
-            disabledContentColor = MaterialTheme.colorScheme.onPrimary.copy(alpha = 0.6f)
+            containerColor = containerColor,
+            contentColor = contentColor,
+            disabledContainerColor = containerColor.copy(alpha = 0.6f),
+            disabledContentColor = contentColor.copy(alpha = 0.6f)
         ),
         content = content,
     )

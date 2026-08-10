@@ -23,6 +23,11 @@
     <string name="continue_game">继续游戏</string>
     <string name="back">返回</string>
     <string name="settings">设置</string>
+    <string name="vibration">震动</string>
+    <string name="about">关于</string>
+    <string name="version">版本</string>
+    <string name="audio_haptics">音效与震动</string>
+    <string name="appearance">外观</string>
     <string name="difficulty">难度</string>
     <string name="difficulty_easy">简单</string>
     <string name="difficulty_normal">普通</string>

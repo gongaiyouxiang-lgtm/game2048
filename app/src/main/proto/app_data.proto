@@ -10,4 +10,5 @@ message AppData {
   string current_board = 4;
   int32 current_score = 5;
   int32 current_grid_size = 6;
+  bool vibration_muted = 7;
 }

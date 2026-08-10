@@ -40,7 +40,8 @@ fun AppTitle(modifier: Modifier = Modifier) {
         )
         Text(
             text = stringResource(R.string.title_subtitle),
-            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold)
+            color = Color(0xFFEC4899),
+            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
         )
     }
 }

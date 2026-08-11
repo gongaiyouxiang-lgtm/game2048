@@ -1,0 +1,69 @@
+# Codemagic CI/CD — build the KMP app for iOS (TestFlight) and Android.
+#
+# Before the first iOS run, in the Codemagic UI you must:
+#   1. Add an App Store Connect integration (Team settings > Integrations) and put its
+#      name in `integrations.app_store_connect` below (here: "AppStoreConnect").
+#   2. Create the app record in App Store Connect with bundle id `com.pp.game2048`.
+# Signing certificates + provisioning profiles are fetched automatically from that
+# integration by `ios_signing` / `fetch-signing-files` (automatic code signing).
+
+workflows:
+
+  ios-testflight:
+    name: iOS – TestFlight
+    instance_type: mac_mini_m2
+    max_build_duration: 90
+    integrations:
+      app_store_connect: AppStoreConnect
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.pp.game2048
+      vars:
+        BUNDLE_ID: "com.pp.game2048"
+        XCODE_PROJECT: "iosApp/iosApp.xcodeproj"
+        XCODE_SCHEME: "iosApp"
+      java: 17
+    scripts:
+      - name: Make gradlew executable
+        script: chmod +x ./gradlew
+      - name: Set build number
+        script: |
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$CM_BUILD_DIR/iosApp/iosApp/Info.plist"
+      - name: Set up keychain
+        script: keychain initialize
+      - name: Fetch signing files
+        script: |
+          app-store-connect fetch-signing-files "$BUNDLE_ID" \
+            --type IOS_APP_STORE \
+            --create
+      - name: Add certificates to keychain
+        script: keychain add-certificates
+      - name: Apply provisioning profiles to the project
+        script: xcode-project use-profiles
+      - name: Build IPA (runs the Kotlin/Native framework build via the Xcode run-script)
+        script: |
+          xcode-project build-ipa \
+            --project "$XCODE_PROJECT" \
+            --scheme "$XCODE_SCHEME"
+    artifacts:
+      - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+
+  android:
+    name: Android – Debug APK
+    instance_type: linux_x2
+    max_build_duration: 60
+    environment:
+      java: 17
+    scripts:
+      - name: Make gradlew executable
+        script: chmod +x ./gradlew
+      - name: Build debug APK
+        script: ./gradlew :app:assembleDebug
+    artifacts:
+      - app/build/outputs/**/*.apk

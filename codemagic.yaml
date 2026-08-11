@@ -2,7 +2,7 @@
 #
 # Before the first iOS run, in the Codemagic UI you must:
 #   1. Add an App Store Connect integration (Team settings > Integrations) and put its
-#      name in `integrations.app_store_connect` below (here: "AppStoreConnect").
+#      name in `integrations.app_store_connect` below (here: "Fruit 2048").
 #   2. Create the app record in App Store Connect with bundle id `com.pp.game2048`.
 # Signing certificates + provisioning profiles are fetched automatically from that
 # integration by `ios_signing` / `fetch-signing-files` (automatic code signing).
@@ -14,7 +14,7 @@ workflows:
     instance_type: mac_mini_m2
     max_build_duration: 90
     integrations:
-      app_store_connect: AppStoreConnect
+      app_store_connect: "Fruit 2048"
     environment:
       ios_signing:
         distribution_type: app_store

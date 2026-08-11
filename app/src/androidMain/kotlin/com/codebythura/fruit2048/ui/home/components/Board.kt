@@ -17,7 +17,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.codebythura.fruit2048.data.GRID_SIZE
 import com.codebythura.fruit2048.data.TileData

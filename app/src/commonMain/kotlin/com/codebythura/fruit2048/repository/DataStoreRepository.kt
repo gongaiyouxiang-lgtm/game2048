@@ -38,10 +38,10 @@ interface DataStoreRepository {
 class DataStoreRepositoryImpl(private val datastore: DataStore<AppData>) :
     DataStoreRepository {
 
-    override fun observeBestScore() = datastore.data.map { it.bestScore }.flowOn(Dispatchers.IO)
+    override fun observeBestScore() = datastore.data.map { it.bestScore }.flowOn(Dispatchers.Default)
 
     override suspend fun updateBestScoreIfNecessary(newScore: Int): Boolean =
-        withContext(Dispatchers.IO) {
+        withContext(Dispatchers.Default) {
             var updated = false
             datastore.updateData { current ->
                 if (newScore > current.bestScore) {
@@ -57,9 +57,9 @@ class DataStoreRepositoryImpl(private val datastore: DataStore<AppData>) :
     // grid_size == 0 means "never set" -> fall back to the default (normal) board.
     override fun observeGridSize() = datastore.data
         .map { if (it.gridSize <= 0) GRID_SIZE else it.gridSize }
-        .flowOn(Dispatchers.IO)
+        .flowOn(Dispatchers.Default)
 
-    override suspend fun setGridSize(size: Int) = withContext(Dispatchers.IO) {
+    override suspend fun setGridSize(size: Int) = withContext(Dispatchers.Default) {
         datastore.updateData { it.copy(gridSize = size) }
         Unit
     }
@@ -67,9 +67,9 @@ class DataStoreRepositoryImpl(private val datastore: DataStore<AppData>) :
     // sound_muted defaults to false, so sound is enabled by default for new and existing data.
     override fun observeSoundEnabled() = datastore.data
         .map { !it.soundMuted }
-        .flowOn(Dispatchers.IO)
+        .flowOn(Dispatchers.Default)
 
-    override suspend fun setSoundEnabled(enabled: Boolean) = withContext(Dispatchers.IO) {
+    override suspend fun setSoundEnabled(enabled: Boolean) = withContext(Dispatchers.Default) {
         datastore.updateData { it.copy(soundMuted = !enabled) }
         Unit
     }
@@ -77,9 +77,9 @@ class DataStoreRepositoryImpl(private val datastore: DataStore<AppData>) :
     // vibration_muted defaults to false, so vibration is enabled by default.
     override fun observeVibrationEnabled() = datastore.data
         .map { !it.vibrationMuted }
-        .flowOn(Dispatchers.IO)
+        .flowOn(Dispatchers.Default)
 
-    override suspend fun setVibrationEnabled(enabled: Boolean) = withContext(Dispatchers.IO) {
+    override suspend fun setVibrationEnabled(enabled: Boolean) = withContext(Dispatchers.Default) {
         datastore.updateData { it.copy(vibrationMuted = !enabled) }
         Unit
     }
@@ -87,7 +87,7 @@ class DataStoreRepositoryImpl(private val datastore: DataStore<AppData>) :
     private val gridConverter = GridConverter()
 
     override suspend fun saveCurrentGame(board: GridMatrix, score: Int, gridSize: Int) =
-        withContext(Dispatchers.IO) {
+        withContext(Dispatchers.Default) {
             val serialized = gridConverter.fromBoard(board)
             datastore.updateData {
                 it.copy(
@@ -99,7 +99,7 @@ class DataStoreRepositoryImpl(private val datastore: DataStore<AppData>) :
             Unit
         }
 
-    override suspend fun loadCurrentGame(): SavedGame? = withContext(Dispatchers.IO) {
+    override suspend fun loadCurrentGame(): SavedGame? = withContext(Dispatchers.Default) {
         val data = datastore.data.first()
         if (data.currentBoard.isBlank()) return@withContext null
         SavedGame(
@@ -109,17 +109,17 @@ class DataStoreRepositoryImpl(private val datastore: DataStore<AppData>) :
         )
     }
 
-    override suspend fun clearCurrentGame() = withContext(Dispatchers.IO) {
+    override suspend fun clearCurrentGame() = withContext(Dispatchers.Default) {
         datastore.updateData { it.copy(currentBoard = "") }
         Unit
     }
 
     override fun observeHasActiveGame() = datastore.data
         .map { it.currentBoard.isNotBlank() }
-        .flowOn(Dispatchers.IO)
+        .flowOn(Dispatchers.Default)
 
     override fun observeSavedGridSize() = datastore.data
         .map { if (it.currentGridSize <= 0) GRID_SIZE else it.currentGridSize }
-        .flowOn(Dispatchers.IO)
+        .flowOn(Dispatchers.Default)
 
 }

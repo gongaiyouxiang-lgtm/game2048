@@ -71,7 +71,6 @@ kotlin {
             implementation(libs.androidx.core.ktx)
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
-            implementation(libs.datastore)
             implementation(libs.play.services.ads)
         }
         commonMain.dependencies {
@@ -91,7 +90,10 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(libs.koin.compose.viewmodel.navigation)
 
+            implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.datastore.core.okio)
+            implementation(libs.okio)
         }
     }
 }

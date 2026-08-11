@@ -23,6 +23,7 @@ lifecycleMp = "2.8.4"
 navigationMp = "2.8.0-alpha10"
 okio = "3.9.1"
 datastoreOkio = "1.1.1"
+coroutines = "1.9.0"
 
 
 [libraries]
@@ -61,6 +62,7 @@ koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-view
 # Multiplatform DataStore (okio-backed, works on iOS)
 datastore-core-okio = { module = "androidx.datastore:datastore-core-okio", version.ref = "datastoreOkio" }
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

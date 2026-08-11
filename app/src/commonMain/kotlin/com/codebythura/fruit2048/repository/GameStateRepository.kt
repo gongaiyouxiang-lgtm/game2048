@@ -29,15 +29,15 @@ class GameStateRepositoryImpl(
     private val gridConverter = GridConverter()
 
     override fun observeRowCount(): Flow<Int> =
-        datastore.data.map { it.undoStack.size }.flowOn(Dispatchers.IO)
+        datastore.data.map { it.undoStack.size }.flowOn(Dispatchers.Default)
 
-    override suspend fun saveState(state: GameStateEntity) = withContext(Dispatchers.IO) {
+    override suspend fun saveState(state: GameStateEntity) = withContext(Dispatchers.Default) {
         val entry = SavedBoard(board = gridConverter.fromBoard(state.state), score = state.score)
         datastore.updateData { it.copy(undoStack = it.undoStack + entry) }
         Unit
     }
 
-    override suspend fun getAndDeleteLastState(): GameStateEntity? = withContext(Dispatchers.IO) {
+    override suspend fun getAndDeleteLastState(): GameStateEntity? = withContext(Dispatchers.Default) {
         var popped: SavedBoard? = null
         datastore.updateData { current ->
             val stack = current.undoStack
@@ -51,7 +51,7 @@ class GameStateRepositoryImpl(
         popped?.let { GameStateEntity(state = gridConverter.toBoard(it.board), score = it.score) }
     }
 
-    override suspend fun deleteAllStates() = withContext(Dispatchers.IO) {
+    override suspend fun deleteAllStates() = withContext(Dispatchers.Default) {
         datastore.updateData { it.copy(undoStack = emptyList()) }
         Unit
     }

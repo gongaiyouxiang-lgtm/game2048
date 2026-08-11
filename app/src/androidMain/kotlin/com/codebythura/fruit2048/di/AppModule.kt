@@ -1,11 +1,9 @@
 package com.codebythura.fruit2048.di
 
 import androidx.datastore.core.DataStore
-import androidx.datastore.core.DataStoreFactory
-import androidx.datastore.dataStoreFile
 import com.codebythura.fruit2048.ads.InterstitialAdManager
 import com.codebythura.fruit2048.data.AppData
-import com.codebythura.fruit2048.data.AppDataSerializer
+import com.codebythura.fruit2048.data.createAppDataStore
 import com.codebythura.fruit2048.repository.DataStoreRepository
 import com.codebythura.fruit2048.repository.DataStoreRepositoryImpl
 import com.codebythura.fruit2048.repository.GameStateRepository
@@ -21,10 +19,9 @@ import org.koin.dsl.module
 
 val appModule = module {
     single<DataStore<AppData>> {
-        DataStoreFactory.create(
-            serializer = AppDataSerializer,
-            produceFile = { androidContext().dataStoreFile("app_data.json") },
-        )
+        createAppDataStore {
+            androidContext().filesDir.resolve("datastore/app_data.json").absolutePath
+        }
     }
     single<DataStoreRepository> { DataStoreRepositoryImpl(get()) }
     single<GameStateRepository> { GameStateRepositoryImpl(get()) }

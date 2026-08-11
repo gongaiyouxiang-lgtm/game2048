@@ -1,6 +1,6 @@
 package com.codebythura.fruit2048.ui.home.components
 
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,91 +11,86 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.codebythura.fruit2048.R
+import com.codebythura.fruit2048.resources.*
+import com.codebythura.fruit2048.ui.theme.Fruit2048Theme
 
 
 @Composable
-fun RestartConfirmDialog(
-    onConfirm: () -> Unit,
-    onDismiss: () -> Unit,
+fun GameOverDialog(
+    score: Int,
+    onGameRestart: () -> Unit,
 ) {
-    Dialog(onDismissRequest = onDismiss) {
+    Dialog(onDismissRequest = {}) {
         Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
+            modifier = Modifier.fillMaxWidth().wrapContentHeight(),
             shape = RoundedCornerShape(12.dp),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
+                modifier = Modifier.fillMaxWidth().padding(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = stringResource(R.string.confirm),
+                    text = stringResource(Res.string.game_over),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                 )
                 Text(
-                    text = stringResource(R.string.restart_confirm_message),
+                    text = stringResource(Res.string.final_score, score),
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier.padding(top = 12.dp, bottom = 18.dp)
                 )
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    RestartButton(
-                        onClick = onConfirm,
-                        modifier = Modifier.weight(1f)
-                    )
-                    CancelButton(
-                        onClick = onDismiss,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
+                TryAgainButton(onClick = onGameRestart)
             }
         }
     }
 }
 
-
 @Composable
-private fun RestartButton(
+private fun TryAgainButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Button(
         onClick = onClick,
         shape = RoundedCornerShape(12.dp),
-        modifier = modifier,
     ) {
-        Text(stringResource(R.string.restart))
+        Row(
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Image(
+                painter = painterResource(Res.drawable.restart),
+                contentDescription = stringResource(Res.string.try_again),
+            )
+            Text(
+                text = stringResource(Res.string.try_again),
+                color = MaterialTheme.colorScheme.onPrimary,
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.SemiBold)
+            )
+        }
     }
 }
 
+
+@Preview
 @Composable
-private fun CancelButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    OutlinedButton(
-        onClick = onClick,
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary),
-        shape = RoundedCornerShape(12.dp),
-        modifier = modifier,
-    ) {
-        Text(text = stringResource(R.string.cancel))
+private fun GameOverDialogPreview() {
+    Fruit2048Theme {
+        GameOverDialog(score = 100) { }
     }
 }
+
+
+

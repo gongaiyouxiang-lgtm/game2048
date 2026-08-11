@@ -80,6 +80,7 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(compose.materialIconsExtended)
 
             implementation(libs.androidx.lifecycle.viewmodel.compose)
             implementation(libs.androidx.lifecycle.runtime.compose)
@@ -164,4 +165,10 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
+}
+
+// Generate the typed `Res` accessor class in a stable, explicit package.
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "com.codebythura.fruit2048.resources"
 }

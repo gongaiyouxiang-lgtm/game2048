@@ -1,9 +1,9 @@
 package com.codebythura.fruit2048.ads
 
-import android.app.Activity
 import android.content.Context
 import android.util.Log
 import com.codebythura.fruit2048.BuildConfig
+import com.codebythura.fruit2048.util.ActivityHolder
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
@@ -16,7 +16,7 @@ import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
  * every Nth game over and at most once per [MIN_INTERVAL_MILLIS]. Always keeps
  * one ad preloaded.
  */
-class InterstitialAdManager(
+actual class InterstitialAdManager(
     private val context: Context,
 ) {
     private var interstitialAd: InterstitialAd? = null
@@ -24,7 +24,7 @@ class InterstitialAdManager(
     private var gameOverCount = 0
     private var lastShownAtMillis = 0L
 
-    fun preload() {
+    actual fun preload() {
         if (interstitialAd != null || isLoading) return
         isLoading = true
         InterstitialAd.load(
@@ -48,13 +48,14 @@ class InterstitialAdManager(
     }
 
     /** Call once per game over; shows the ad only when the frequency cap allows. */
-    fun maybeShowOnGameOver(activity: Activity) {
+    actual fun maybeShowOnGameOver() {
+        val activity = ActivityHolder.current
         gameOverCount++
         val now = System.currentTimeMillis()
         val capReady = gameOverCount % SHOW_EVERY_N_GAME_OVERS == 0 &&
             now - lastShownAtMillis >= MIN_INTERVAL_MILLIS
         val ad = interstitialAd
-        if (!capReady || ad == null) {
+        if (!capReady || ad == null || activity == null) {
             Log.d(TAG, "Interstitial skipped (count=$gameOverCount, ready=$capReady, hasAd=${ad != null})")
             preload()
             return

@@ -17,7 +17,7 @@ import com.google.android.gms.ads.AdView
  * debug, real unit in release). No-op inside @Preview/inspection.
  */
 @Composable
-fun BannerAd(modifier: Modifier = Modifier) {
+actual fun BannerAd(modifier: Modifier) {
     if (LocalInspectionMode.current) return
 
     val adWidthDp = LocalConfiguration.current.screenWidthDp

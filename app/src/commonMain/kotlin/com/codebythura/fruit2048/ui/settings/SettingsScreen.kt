@@ -31,24 +31,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.codebythura.fruit2048.BuildConfig
-import com.codebythura.fruit2048.R
-import com.codebythura.fruit2048.util.LocaleManager
-import com.codebythura.fruit2048.util.findActivity
+import com.codebythura.fruit2048.resources.*
+import com.codebythura.fruit2048.util.LocaleController
+import com.codebythura.fruit2048.util.appVersionName
 
-private data class LanguageOption(val tag: String, val labelRes: Int)
+private data class LanguageOption(val tag: String, val labelRes: StringResource)
 
 private val languageOptions = listOf(
-    LanguageOption(tag = "en", labelRes = R.string.lang_english),
-    LanguageOption(tag = "zh-TW", labelRes = R.string.lang_traditional_chinese),
-    LanguageOption(tag = "zh-CN", labelRes = R.string.lang_simplified_chinese),
+    LanguageOption(tag = "en", labelRes = Res.string.lang_english),
+    LanguageOption(tag = "zh-TW", labelRes = Res.string.lang_traditional_chinese),
+    LanguageOption(tag = "zh-CN", labelRes = Res.string.lang_simplified_chinese),
 )
 
 @Composable
@@ -58,8 +58,8 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = koinViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    var currentLanguage by remember { mutableStateOf(LocaleManager.getLanguage(context)) }
+    val locale = koinInject<LocaleController>()
+    var currentLanguage by remember { mutableStateOf(locale.current()) }
 
     Scaffold(modifier = modifier) { innerPadding ->
         Column(
@@ -71,35 +71,35 @@ fun SettingsScreen(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = onBack) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
+                    Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(Res.string.back))
                 }
                 Text(
-                    text = stringResource(R.string.settings),
+                    text = stringResource(Res.string.settings),
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                     modifier = Modifier.padding(start = 4.dp),
                 )
             }
 
-            SectionLabel(stringResource(R.string.audio_haptics))
+            SectionLabel(stringResource(Res.string.audio_haptics))
             SettingsCard {
                 SwitchRow(
                     icon = "🔊",
-                    label = stringResource(R.string.sound),
+                    label = stringResource(Res.string.sound),
                     checked = state.soundEnabled,
                     onCheckedChange = viewModel::setSoundEnabled,
                 )
                 HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f))
                 SwitchRow(
                     icon = "📳",
-                    label = stringResource(R.string.vibration),
+                    label = stringResource(Res.string.vibration),
                     checked = state.vibrationEnabled,
                     onCheckedChange = viewModel::setVibrationEnabled,
                 )
             }
 
-            SectionLabel(stringResource(R.string.appearance))
+            SectionLabel(stringResource(Res.string.appearance))
             Text(
-                text = stringResource(R.string.language),
+                text = stringResource(Res.string.language),
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 fontSize = 13.sp,
                 modifier = Modifier.padding(start = 4.dp, bottom = 8.dp),
@@ -120,9 +120,8 @@ fun SettingsScreen(
                             )
                             .clickable {
                                 if (currentLanguage != option.tag) {
-                                    LocaleManager.setLanguage(context, option.tag)
+                                    locale.set(option.tag)
                                     currentLanguage = option.tag
-                                    context.findActivity()?.recreate()
                                 }
                             }
                             .padding(vertical = 12.dp),
@@ -138,7 +137,7 @@ fun SettingsScreen(
                 }
             }
 
-            SectionLabel(stringResource(R.string.about))
+            SectionLabel(stringResource(Res.string.about))
             SettingsCard {
                 Row(
                     modifier = Modifier
@@ -148,12 +147,12 @@ fun SettingsScreen(
                 ) {
                     Text("ℹ️", fontSize = 18.sp, modifier = Modifier.padding(end = 12.dp))
                     Text(
-                        text = stringResource(R.string.version),
+                        text = stringResource(Res.string.version),
                         modifier = Modifier.weight(1f),
                         fontSize = 15.sp,
                     )
                     Text(
-                        text = BuildConfig.VERSION_NAME,
+                        text = appVersionName(),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         fontSize = 14.sp,
                     )

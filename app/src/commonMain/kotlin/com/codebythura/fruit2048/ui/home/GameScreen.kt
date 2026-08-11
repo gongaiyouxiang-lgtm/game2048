@@ -39,11 +39,10 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.codebythura.fruit2048.R
+import com.codebythura.fruit2048.resources.*
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.codebythura.fruit2048.ads.BannerAd
 import com.codebythura.fruit2048.ads.InterstitialAdManager
@@ -51,7 +50,6 @@ import com.codebythura.fruit2048.data.Direction
 import com.codebythura.fruit2048.data.TileData
 import com.codebythura.fruit2048.data.defaultDurationMillis
 import com.codebythura.fruit2048.ui.home.components.ActionsRow
-import com.codebythura.fruit2048.util.findActivity
 import com.codebythura.fruit2048.ui.home.components.AppTitle
 import com.codebythura.fruit2048.ui.home.components.Board
 import com.codebythura.fruit2048.ui.home.components.GameOverDialog
@@ -76,7 +74,6 @@ fun GameScreen(
     viewModel: GameViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     val sound = koinInject<SoundManager>()
     val interstitialAdManager = koinInject<InterstitialAdManager>()
     LaunchedEffect(Unit) { interstitialAdManager.preload() }
@@ -84,7 +81,7 @@ fun GameScreen(
     LaunchedEffect(state.isGameOver) {
         if (state.isGameOver) {
             delay(defaultDurationMillis.toLong()) // wait for the last tile animation
-            context.findActivity()?.let { interstitialAdManager.maybeShowOnGameOver(it) }
+            interstitialAdManager.maybeShowOnGameOver()
             showGameOverDialog = true
         } else {
             showGameOverDialog = false
@@ -167,7 +164,7 @@ fun GameContent(
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                contentDescription = stringResource(R.string.back),
+                contentDescription = stringResource(Res.string.back),
             )
         }
         AppTitle()

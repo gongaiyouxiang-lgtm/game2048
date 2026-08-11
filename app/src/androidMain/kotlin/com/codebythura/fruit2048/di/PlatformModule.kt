@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import com.codebythura.fruit2048.ads.InterstitialAdManager
 import com.codebythura.fruit2048.data.AppData
 import com.codebythura.fruit2048.data.createAppDataStore
+import com.codebythura.fruit2048.util.LocaleController
 import com.codebythura.fruit2048.util.SoundManager
 import com.codebythura.fruit2048.util.VibrationManager
 import org.koin.android.ext.koin.androidContext
@@ -19,4 +20,5 @@ val platformModule = module {
     single { SoundManager(androidContext(), get()) }
     single { VibrationManager(androidContext()) }
     single { InterstitialAdManager(androidContext()) }
+    single { LocaleController(androidContext()) }
 }

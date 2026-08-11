@@ -25,25 +25,26 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.codebythura.fruit2048.R
+import com.codebythura.fruit2048.resources.*
 import com.codebythura.fruit2048.ads.BannerAd
 import com.codebythura.fruit2048.util.SoundManager
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
-private data class DifficultyOption(val size: Int, val labelRes: Int)
+private data class DifficultyOption(val size: Int, val labelRes: StringResource)
 
 private val difficultyOptions = listOf(
-    DifficultyOption(size = 5, labelRes = R.string.difficulty_easy),
-    DifficultyOption(size = 4, labelRes = R.string.difficulty_normal),
-    DifficultyOption(size = 3, labelRes = R.string.difficulty_hard),
+    DifficultyOption(size = 5, labelRes = Res.string.difficulty_easy),
+    DifficultyOption(size = 4, labelRes = Res.string.difficulty_normal),
+    DifficultyOption(size = 3, labelRes = Res.string.difficulty_hard),
 )
 
 private val Primary = Color(0xFF176FE7)
@@ -55,7 +56,7 @@ private val Sheen = Brush.verticalGradient(listOf(Color(0x66FFFFFF), Color(0x00F
 private val BlueFill = Brush.verticalGradient(listOf(BlueTop, BlueBottom))
 
 /**
- * Image-backed landing: the AI-generated [R.drawable.home_bg_art] provides the hero art in
+ * Image-backed landing: the AI-generated [Res.drawable.home_bg_art] provides the hero art in
  * the top half; glossy, elevated Compose controls sit just below it in the lower area.
  * Sound/vibration/language live in the Settings screen.
  */
@@ -76,7 +77,7 @@ fun LandingScreen(
     ) { innerPadding ->
         Box(modifier = Modifier.fillMaxSize()) {
             Image(
-                painter = painterResource(R.drawable.home_bg_art),
+                painter = painterResource(Res.drawable.home_bg_art),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize(),
@@ -99,7 +100,7 @@ fun LandingScreen(
                 // Sit the controls just below the hero (lifted off the very bottom)
                 Spacer(Modifier.weight(1f))
 
-                SectionLabel(stringResource(R.string.difficulty))
+                SectionLabel(stringResource(Res.string.difficulty))
                 DifficultySegmented(
                     selected = state.gridSize,
                     onSelect = { sound.playClick(); viewModel.setDifficulty(it) },
@@ -228,7 +229,7 @@ private fun PlayButton(onClick: () -> Unit) {
                 .background(Sheen),
         )
         Text(
-            text = "▶  " + stringResource(R.string.start_game),
+            text = "▶  " + stringResource(Res.string.start_game),
             color = Color.White,
             fontWeight = FontWeight.ExtraBold,
             fontSize = 19.sp,
@@ -251,7 +252,7 @@ private fun ContinueButton(onClick: () -> Unit) {
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = stringResource(R.string.continue_game),
+            text = stringResource(Res.string.continue_game),
             color = Primary,
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,

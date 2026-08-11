@@ -8,9 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import com.codebythura.fruit2048.R
+import com.codebythura.fruit2048.resources.*
 
 private val lightColors = listOf(
     Color(0xFF08B928),
@@ -39,7 +39,7 @@ fun AppTitle(modifier: Modifier = Modifier) {
             )
         )
         Text(
-            text = stringResource(R.string.title_subtitle),
+            text = stringResource(Res.string.title_subtitle),
             color = Color(0xFFEC4899),
             style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
         )

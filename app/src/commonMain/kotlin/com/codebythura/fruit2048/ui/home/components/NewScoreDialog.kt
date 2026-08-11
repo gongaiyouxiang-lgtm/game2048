@@ -12,12 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.codebythura.fruit2048.R
+import com.codebythura.fruit2048.resources.*
 
 @Composable
 fun NewBestScoreDialog(
@@ -34,12 +34,12 @@ fun NewBestScoreDialog(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = stringResource(R.string.congratulation),
+                    text = stringResource(Res.string.congratulation),
                     textAlign = TextAlign.Center,
                     style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                 )
                 Text(
-                    text = stringResource(R.string.new_best_score, bestScore),
+                    text = stringResource(Res.string.new_best_score, bestScore),
                     style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.SemiBold),
                     modifier = Modifier.padding(top = 12.dp, bottom = 18.dp)
                 )
@@ -48,7 +48,7 @@ fun NewBestScoreDialog(
                     shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text(stringResource(R.string.close))
+                    Text(stringResource(Res.string.close))
                 }
             }
         }

@@ -17,11 +17,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.codebythura.fruit2048.R
+import com.codebythura.fruit2048.resources.*
 
 private val buttonHeight = 50.dp
 private val OrangeBtn = Color(0xFFFF9F43)
@@ -68,8 +68,8 @@ fun UndoGameButton(
         contentColor = YellowContent,
     ) {
         Icon(
-            painter = painterResource(R.drawable.undo),
-            contentDescription = stringResource(R.string.undo),
+            painter = painterResource(Res.drawable.undo),
+            contentDescription = stringResource(Res.string.undo),
         )
     }
 }
@@ -93,11 +93,11 @@ fun NewGameButton(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
-                painter = painterResource(R.drawable.restart),
-                contentDescription = stringResource(R.string.new_game),
+                painter = painterResource(Res.drawable.restart),
+                contentDescription = stringResource(Res.string.new_game),
             )
             Text(
-                text = stringResource(R.string.new_game),
+                text = stringResource(Res.string.new_game),
                 color = Color.White,
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold)
             )

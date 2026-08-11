@@ -14,10 +14,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
+import org.jetbrains.compose.resources.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.codebythura.fruit2048.R
+import com.codebythura.fruit2048.resources.*
 
 private val ScorePurple = Color(0xFF7C3AED)
 
@@ -33,12 +33,12 @@ fun ScoreRow(
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         ScoreContainer(
-            title = stringResource(R.string.best_score),
+            title = stringResource(Res.string.best_score),
             score = bestScore,
             modifier = Modifier.weight(1f),
         )
         ScoreContainer(
-            title = stringResource(R.string.current_score),
+            title = stringResource(Res.string.current_score),
             score = score,
             modifier = Modifier.weight(1f),
         )

@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.onEach
  * Plays short game sound effects via [SoundPool] (low latency, overlapping playback).
  * Self-gated: reads the sound setting so callers just call the play methods.
  */
-class SoundManager(
+actual class SoundManager(
     context: Context,
     dataStoreRepo: DataStoreRepository,
 ) {
@@ -50,9 +50,9 @@ class SoundManager(
     }
 
     /** Merge sound; [rate] lets the pitch rise with the merged tile value. */
-    fun playMerge(rate: Float = 1f) = play(mergeId, rate)
-    fun playSlide() = play(slideId)
-    fun playGameOver() = play(gameOverId)
-    fun playWin() = play(winId)
-    fun playClick() = play(clickId)
+    actual fun playMerge(rate: Float) = play(mergeId, rate)
+    actual fun playSlide() = play(slideId)
+    actual fun playGameOver() = play(gameOverId)
+    actual fun playWin() = play(winId)
+    actual fun playClick() = play(clickId)
 }

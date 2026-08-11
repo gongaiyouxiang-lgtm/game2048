@@ -10,7 +10,7 @@ import android.os.VibratorManager
  * Short haptic feedback on tile merges. Parallels [SoundManager]; callers decide whether
  * vibration is enabled before invoking. Requires the VIBRATE permission.
  */
-class VibrationManager(
+actual class VibrationManager(
     private val context: Context,
 ) {
     private val vibrator: Vibrator? by lazy {
@@ -22,7 +22,7 @@ class VibrationManager(
         }
     }
 
-    fun vibrateMerge() {
+    actual fun vibrateMerge() {
         val v = vibrator ?: return
         if (!v.hasVibrator()) return
         try {

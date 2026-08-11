@@ -14,7 +14,6 @@ import com.codebythura.fruit2048.data.emptyGrid
 import com.codebythura.fruit2048.database.GameStateEntity
 import com.codebythura.fruit2048.util.SoundManager
 import com.codebythura.fruit2048.util.VibrationManager
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -23,7 +22,6 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class GameUIState(
     val tileData: List<TileData> = emptyList(),
@@ -60,8 +58,7 @@ private fun GameState.toEntity() = GameStateEntity(
 const val GRID_SIZE_ARG = "gridSize"
 const val RESUME_ARG = "resume"
 
-@HiltViewModel
-class GameViewModel @Inject constructor(
+class GameViewModel(
     private val gameStateRepo: GameStateRepository,
     private val dataStoreRepo: DataStoreRepository,
     private val soundManager: SoundManager,

@@ -31,11 +31,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.codebythura.fruit2048.R
 import com.codebythura.fruit2048.ads.BannerAd
-import com.codebythura.fruit2048.util.rememberSoundManager
+import com.codebythura.fruit2048.util.SoundManager
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 
 private data class DifficultyOption(val size: Int, val labelRes: Int)
 
@@ -64,10 +65,10 @@ fun LandingScreen(
     onContinueGame: (gridSize: Int) -> Unit,
     onOpenSettings: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: LandingViewModel = hiltViewModel(),
+    viewModel: LandingViewModel = koinViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val sound = rememberSoundManager()
+    val sound = koinInject<SoundManager>()
 
     Scaffold(
         modifier = modifier,

@@ -10,7 +10,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 interface GameStateRepository {
     fun observeRowCount(): Flow<Int>
@@ -23,7 +22,7 @@ interface GameStateRepository {
  * Undo stack backed by the DataStore [AppData.undoStack] (replaces the Room game_state table),
  * so it works in Kotlin Multiplatform common code.
  */
-class GameStateRepositoryImpl @Inject constructor(
+class GameStateRepositoryImpl(
     private val datastore: DataStore<AppData>,
 ) : GameStateRepository {
 

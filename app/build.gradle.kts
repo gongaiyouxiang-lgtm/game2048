@@ -4,9 +4,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.ksp)
     alias(libs.plugins.serialization)
-    alias(libs.plugins.hilt.android)
 }
 
 // AdMob official test ad units (always used by debug builds to stay policy-safe).
@@ -121,9 +119,9 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended")
     implementation(libs.datastore)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
-    implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.viewmodel)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.play.services.ads)
     testImplementation(libs.junit)

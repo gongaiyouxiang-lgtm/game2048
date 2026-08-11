@@ -3,20 +3,17 @@ package com.codebythura.fruit2048.ui.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codebythura.fruit2048.repository.DataStoreRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class SettingsUIState(
     val soundEnabled: Boolean = true,
     val vibrationEnabled: Boolean = true,
 )
 
-@HiltViewModel
-class SettingsViewModel @Inject constructor(
+class SettingsViewModel(
     private val dataStoreRepo: DataStoreRepository,
 ) : ViewModel() {
 

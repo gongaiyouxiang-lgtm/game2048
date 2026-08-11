@@ -5,21 +5,17 @@ import android.media.AudioAttributes
 import android.media.SoundPool
 import com.codebythura.fruit2048.R
 import com.codebythura.fruit2048.repository.DataStoreRepository
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Plays short game sound effects via [SoundPool] (low latency, overlapping playback).
  * Self-gated: reads the sound setting so callers just call the play methods.
  */
-@Singleton
-class SoundManager @Inject constructor(
-    @ApplicationContext context: Context,
+class SoundManager(
+    context: Context,
     dataStoreRepo: DataStoreRepository,
 ) {
     @Volatile

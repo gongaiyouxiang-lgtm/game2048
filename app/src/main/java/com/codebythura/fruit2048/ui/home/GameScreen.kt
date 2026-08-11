@@ -44,10 +44,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.codebythura.fruit2048.R
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.codebythura.fruit2048.ads.BannerAd
-import com.codebythura.fruit2048.ads.rememberInterstitialAdManager
+import com.codebythura.fruit2048.ads.InterstitialAdManager
 import com.codebythura.fruit2048.data.Direction
 import com.codebythura.fruit2048.data.TileData
 import com.codebythura.fruit2048.data.defaultDurationMillis
@@ -58,7 +57,9 @@ import com.codebythura.fruit2048.ui.home.components.Board
 import com.codebythura.fruit2048.ui.home.components.GameOverDialog
 import com.codebythura.fruit2048.ui.home.components.NewBestScoreDialog
 import com.codebythura.fruit2048.ui.home.components.ScoreRow
-import com.codebythura.fruit2048.util.rememberSoundManager
+import com.codebythura.fruit2048.util.SoundManager
+import org.koin.compose.koinInject
+import org.koin.compose.viewmodel.koinViewModel
 import kotlinx.coroutines.delay
 import kotlin.math.abs
 
@@ -72,12 +73,12 @@ private val BoardCell = Color(0xFFA78BFA)
 fun GameScreen(
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: GameViewModel = hiltViewModel()
+    viewModel: GameViewModel = koinViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
-    val sound = rememberSoundManager()
-    val interstitialAdManager = rememberInterstitialAdManager()
+    val sound = koinInject<SoundManager>()
+    val interstitialAdManager = koinInject<InterstitialAdManager>()
     LaunchedEffect(Unit) { interstitialAdManager.preload() }
     var showGameOverDialog by remember { mutableStateOf(false) }
     LaunchedEffect(state.isGameOver) {

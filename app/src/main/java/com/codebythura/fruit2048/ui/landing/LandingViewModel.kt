@@ -4,12 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.codebythura.fruit2048.data.GRID_SIZE
 import com.codebythura.fruit2048.repository.DataStoreRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 data class LandingUIState(
     val gridSize: Int = GRID_SIZE,
@@ -19,8 +17,7 @@ data class LandingUIState(
     val savedGridSize: Int = GRID_SIZE,
 )
 
-@HiltViewModel
-class LandingViewModel @Inject constructor(
+class LandingViewModel(
     private val dataStoreRepo: DataStoreRepository,
 ) : ViewModel() {
 

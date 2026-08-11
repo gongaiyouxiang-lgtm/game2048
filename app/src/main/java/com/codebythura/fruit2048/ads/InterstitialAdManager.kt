@@ -10,18 +10,14 @@ import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  * Loads and shows interstitial ads with a frequency cap so they only appear on
  * every Nth game over and at most once per [MIN_INTERVAL_MILLIS]. Always keeps
  * one ad preloaded.
  */
-@Singleton
-class InterstitialAdManager @Inject constructor(
-    @ApplicationContext private val context: Context,
+class InterstitialAdManager(
+    private val context: Context,
 ) {
     private var interstitialAd: InterstitialAd? = null
     private var isLoading = false

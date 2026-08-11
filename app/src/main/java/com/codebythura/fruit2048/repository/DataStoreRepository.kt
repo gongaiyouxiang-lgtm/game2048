@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import javax.inject.Inject
 
 /** An in-progress game persisted so the player can resume it later. */
 data class SavedGame(
@@ -36,7 +35,7 @@ interface DataStoreRepository {
     fun observeSavedGridSize(): Flow<Int>
 }
 
-class DataStoreRepositoryImpl @Inject constructor(private val datastore: DataStore<AppData>) :
+class DataStoreRepositoryImpl(private val datastore: DataStore<AppData>) :
     DataStoreRepository {
 
     override fun observeBestScore() = datastore.data.map { it.bestScore }.flowOn(Dispatchers.IO)

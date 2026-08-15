@@ -27,6 +27,8 @@ workflows:
     scripts:
       - name: Make gradlew executable
         script: chmod +x ./gradlew
+      - name: Compile Kotlin for iOS (surface real compiler errors, not hidden by Xcode)
+        script: ./gradlew :app:compileKotlinIosArm64 --console=plain
       - name: Set build number
         script: |
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$CM_BUILD_DIR/iosApp/iosApp/Info.plist"

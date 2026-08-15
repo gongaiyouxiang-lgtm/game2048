@@ -1,11 +1,12 @@
 # Codemagic CI/CD — build the KMP app for iOS (TestFlight) and Android.
 #
 # Before the first iOS run, in the Codemagic UI you must:
-#   1. Add an App Store Connect integration (Team settings > Integrations) and put its
-#      name in `integrations.app_store_connect` below (here: "Fruit 2048").
-#   2. Create the app record in App Store Connect with bundle id `com.pp.game2048`.
-# Signing certificates + provisioning profiles are fetched automatically from that
-# integration by `ios_signing` / `fetch-signing-files` (automatic code signing).
+#   1. Add an App Store Connect API key (Team settings > Integrations) with Admin access,
+#      and put its exact name in `integrations.app_store_connect` below.
+#   2. Register the bundle id `com.pp.game2048` (Apple Developer > Identifiers).
+#   3. Create the app record in App Store Connect with the same bundle id.
+# Signing certificate + provisioning profile are created automatically by
+# `fetch-signing-files --create` using that Admin API key.
 
 workflows:
 
@@ -14,11 +15,8 @@ workflows:
     instance_type: mac_mini_m2
     max_build_duration: 90
     integrations:
-      app_store_connect: "Fruit 2048"
+      app_store_connect: "Fruit 2048 asc key"
     environment:
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: com.pp.game2048
       vars:
         BUNDLE_ID: "com.pp.game2048"
         XCODE_PROJECT: "iosApp/iosApp.xcodeproj"

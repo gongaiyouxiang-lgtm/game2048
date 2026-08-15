@@ -53,7 +53,10 @@ kotlin {
         ).forEach { iosTarget ->
             iosTarget.binaries.framework {
                 baseName = "ComposeApp"
-                isStatic = true
+                // Dynamic (not static): a static framework can leave Compose's own render
+                // assets unbundled, crashing Skia/Metal at first draw on iOS. embedAndSign
+                // copies + signs the dynamic framework into the app's Frameworks dir.
+                isStatic = false
             }
         }
     }

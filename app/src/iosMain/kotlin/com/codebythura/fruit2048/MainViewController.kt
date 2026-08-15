@@ -1,5 +1,3 @@
-@file:OptIn(org.jetbrains.compose.resources.ExperimentalResourceApi::class)
-
 package com.codebythura.fruit2048
 
 import androidx.compose.foundation.background
@@ -19,7 +17,6 @@ import androidx.datastore.core.DataStore
 import com.codebythura.fruit2048.data.AppData
 import com.codebythura.fruit2048.di.initKoin
 import com.codebythura.fruit2048.di.platformModule
-import com.codebythura.fruit2048.resources.Res
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.koin.core.context.GlobalContext
@@ -43,14 +40,11 @@ fun MainViewController(): UIViewController {
     }
 
     step("1 initKoin") {
-        if (GlobalContext.getOrNull() == null) initKoin(platformModule)
+        initKoin(platformModule)
     }
     step("2 DataStore read") {
         val ds = GlobalContext.get().get<DataStore<AppData>>()
         runBlocking { ds.data.first() }
-    }
-    step("3 Res.readBytes(drawable)") {
-        runBlocking { Res.readBytes("drawable/home_bg_art.png") }
     }
 
     val report = log.toString()

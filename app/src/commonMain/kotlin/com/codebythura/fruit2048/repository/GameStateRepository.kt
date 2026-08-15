@@ -7,6 +7,7 @@ import com.codebythura.fruit2048.database.GameStateEntity
 import com.codebythura.fruit2048.database.GridConverter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -29,30 +30,32 @@ class GameStateRepositoryImpl(
     private val gridConverter = GridConverter()
 
     override fun observeRowCount(): Flow<Int> =
-        datastore.data.map { it.undoStack.size }.flowOn(Dispatchers.Default)
+        datastore.data.map { it.undoStack.size }.catch { emit(0) }.flowOn(Dispatchers.Default)
 
     override suspend fun saveState(state: GameStateEntity) = withContext(Dispatchers.Default) {
         val entry = SavedBoard(board = gridConverter.fromBoard(state.state), score = state.score)
-        datastore.updateData { it.copy(undoStack = it.undoStack + entry) }
+        runCatching { datastore.updateData { it.copy(undoStack = it.undoStack + entry) } }
         Unit
     }
 
     override suspend fun getAndDeleteLastState(): GameStateEntity? = withContext(Dispatchers.Default) {
         var popped: SavedBoard? = null
-        datastore.updateData { current ->
-            val stack = current.undoStack
-            if (stack.isEmpty()) {
-                current
-            } else {
-                popped = stack.last()
-                current.copy(undoStack = stack.dropLast(1))
+        runCatching {
+            datastore.updateData { current ->
+                val stack = current.undoStack
+                if (stack.isEmpty()) {
+                    current
+                } else {
+                    popped = stack.last()
+                    current.copy(undoStack = stack.dropLast(1))
+                }
             }
         }
         popped?.let { GameStateEntity(state = gridConverter.toBoard(it.board), score = it.score) }
     }
 
     override suspend fun deleteAllStates() = withContext(Dispatchers.Default) {
-        datastore.updateData { it.copy(undoStack = emptyList()) }
+        runCatching { datastore.updateData { it.copy(undoStack = emptyList()) } }
         Unit
     }
 }

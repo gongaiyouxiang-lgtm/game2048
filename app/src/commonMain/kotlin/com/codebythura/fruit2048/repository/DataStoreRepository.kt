@@ -7,6 +7,7 @@ import com.codebythura.fruit2048.data.GridMatrix
 import com.codebythura.fruit2048.database.GridConverter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
@@ -38,50 +39,57 @@ interface DataStoreRepository {
 class DataStoreRepositoryImpl(private val datastore: DataStore<AppData>) :
     DataStoreRepository {
 
-    override fun observeBestScore() = datastore.data.map { it.bestScore }.flowOn(Dispatchers.Default)
+    // A DataStore read/write error must never abort the app (e.g. iOS file-system hiccup):
+    // reads fall back to defaults, writes are best-effort.
+    private val data: Flow<AppData> = datastore.data.catch { emit(AppData()) }
+
+    private suspend inline fun update(crossinline transform: (AppData) -> AppData) {
+        runCatching { datastore.updateData { transform(it) } }
+    }
+
+    override fun observeBestScore() = data.map { it.bestScore }.flowOn(Dispatchers.Default)
 
     override suspend fun updateBestScoreIfNecessary(newScore: Int): Boolean =
         withContext(Dispatchers.Default) {
             var updated = false
-            datastore.updateData { current ->
-                if (newScore > current.bestScore) {
-                    updated = true
-                    current.copy(bestScore = newScore)
-                } else {
-                    current
+            runCatching {
+                datastore.updateData { current ->
+                    if (newScore > current.bestScore) {
+                        updated = true
+                        current.copy(bestScore = newScore)
+                    } else {
+                        current
+                    }
                 }
             }
-            return@withContext updated
+            updated
         }
 
     // grid_size == 0 means "never set" -> fall back to the default (normal) board.
-    override fun observeGridSize() = datastore.data
+    override fun observeGridSize() = data
         .map { if (it.gridSize <= 0) GRID_SIZE else it.gridSize }
         .flowOn(Dispatchers.Default)
 
     override suspend fun setGridSize(size: Int) = withContext(Dispatchers.Default) {
-        datastore.updateData { it.copy(gridSize = size) }
-        Unit
+        update { it.copy(gridSize = size) }
     }
 
     // sound_muted defaults to false, so sound is enabled by default for new and existing data.
-    override fun observeSoundEnabled() = datastore.data
+    override fun observeSoundEnabled() = data
         .map { !it.soundMuted }
         .flowOn(Dispatchers.Default)
 
     override suspend fun setSoundEnabled(enabled: Boolean) = withContext(Dispatchers.Default) {
-        datastore.updateData { it.copy(soundMuted = !enabled) }
-        Unit
+        update { it.copy(soundMuted = !enabled) }
     }
 
     // vibration_muted defaults to false, so vibration is enabled by default.
-    override fun observeVibrationEnabled() = datastore.data
+    override fun observeVibrationEnabled() = data
         .map { !it.vibrationMuted }
         .flowOn(Dispatchers.Default)
 
     override suspend fun setVibrationEnabled(enabled: Boolean) = withContext(Dispatchers.Default) {
-        datastore.updateData { it.copy(vibrationMuted = !enabled) }
-        Unit
+        update { it.copy(vibrationMuted = !enabled) }
     }
 
     private val gridConverter = GridConverter()
@@ -89,36 +97,34 @@ class DataStoreRepositoryImpl(private val datastore: DataStore<AppData>) :
     override suspend fun saveCurrentGame(board: GridMatrix, score: Int, gridSize: Int) =
         withContext(Dispatchers.Default) {
             val serialized = gridConverter.fromBoard(board)
-            datastore.updateData {
+            update {
                 it.copy(
                     currentBoard = serialized,
                     currentScore = score,
                     currentGridSize = gridSize,
                 )
             }
-            Unit
         }
 
     override suspend fun loadCurrentGame(): SavedGame? = withContext(Dispatchers.Default) {
-        val data = datastore.data.first()
-        if (data.currentBoard.isBlank()) return@withContext null
+        val current = runCatching { datastore.data.first() }.getOrNull() ?: return@withContext null
+        if (current.currentBoard.isBlank()) return@withContext null
         SavedGame(
-            board = gridConverter.toBoard(data.currentBoard),
-            score = data.currentScore,
-            gridSize = if (data.currentGridSize <= 0) GRID_SIZE else data.currentGridSize,
+            board = gridConverter.toBoard(current.currentBoard),
+            score = current.currentScore,
+            gridSize = if (current.currentGridSize <= 0) GRID_SIZE else current.currentGridSize,
         )
     }
 
     override suspend fun clearCurrentGame() = withContext(Dispatchers.Default) {
-        datastore.updateData { it.copy(currentBoard = "") }
-        Unit
+        update { it.copy(currentBoard = "") }
     }
 
-    override fun observeHasActiveGame() = datastore.data
+    override fun observeHasActiveGame() = data
         .map { it.currentBoard.isNotBlank() }
         .flowOn(Dispatchers.Default)
 
-    override fun observeSavedGridSize() = datastore.data
+    override fun observeSavedGridSize() = data
         .map { if (it.currentGridSize <= 0) GRID_SIZE else it.currentGridSize }
         .flowOn(Dispatchers.Default)
 

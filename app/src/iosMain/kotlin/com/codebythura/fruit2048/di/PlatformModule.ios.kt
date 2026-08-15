@@ -32,8 +32,8 @@ private fun iosDataStorePath(): String {
         directory = NSDocumentDirectory,
         inDomain = NSUserDomainMask,
         appropriateForURL = null,
-        create = false,
+        create = true,
         error = null,
     )
-    return (documentDirectory?.path ?: "") + "/app_data.json"
+    return requireNotNull(documentDirectory?.path) { "No iOS documents directory" } + "/app_data.json"
 }

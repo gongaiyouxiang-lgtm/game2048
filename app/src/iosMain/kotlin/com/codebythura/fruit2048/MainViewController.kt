@@ -13,41 +13,21 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.ComposeUIViewController
-import androidx.datastore.core.DataStore
-import com.codebythura.fruit2048.data.AppData
 import com.codebythura.fruit2048.di.initKoin
 import com.codebythura.fruit2048.di.platformModule
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
-import org.koin.core.context.GlobalContext
 import platform.UIKit.UIViewController
 
 /**
- * TEMPORARY diagnostic: run the three iOS-risky startup steps synchronously, each guarded,
- * and print OK / FAIL(+exception) on screen. Pinpoints the launch crash in one build.
+ * TEMPORARY diagnostic entry point. The risky probing logic lives in the (Android-verified)
+ * common [startupDiagnosticReport]; here we only start Koin and show the report.
  */
 fun MainViewController(): UIViewController {
-    val log = StringBuilder("Diagnostic (CMP 1.11.1)\n\n")
-
-    fun step(name: String, block: () -> Unit) {
-        val line = try {
-            block()
-            "OK    $name"
-        } catch (t: Throwable) {
-            "FAIL  $name\n        $t"
-        }
-        log.append(line).append("\n\n")
-    }
-
-    step("1 initKoin") {
+    val report = try {
         initKoin(platformModule)
+        startupDiagnosticReport()
+    } catch (t: Throwable) {
+        "startup FAIL: $t"
     }
-    step("2 DataStore read") {
-        val ds = GlobalContext.get().get<DataStore<AppData>>()
-        runBlocking { ds.data.first() }
-    }
-
-    val report = log.toString()
     return ComposeUIViewController {
         Column(
             modifier = Modifier

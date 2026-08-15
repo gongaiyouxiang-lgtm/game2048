@@ -23,8 +23,8 @@ import platform.UIKit.UIViewController
  */
 fun MainViewController(): UIViewController {
     val report = try {
-        initKoin(platformModule)
-        startupDiagnosticReport()
+        val app = initKoin(platformModule)
+        startupDiagnosticReport(app.koin)
     } catch (t: Throwable) {
         "startup FAIL: $t"
     }

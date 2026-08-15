@@ -7,15 +7,15 @@ import com.codebythura.fruit2048.resources.start_game
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.compose.resources.getString
-import org.koin.core.context.GlobalContext
+import org.koin.core.Koin
 
 /**
  * TEMPORARY iOS-bring-up probe. Runs the iOS-risky startup steps (DataStore read, resource
- * load) with per-step try/catch and returns an on-screen report. Lives in commonMain on
- * purpose so the Android build verifies it compiles — common code that compiles for Android
- * also compiles for the iOS target, avoiding blind iosMain compile failures.
+ * load) with per-step try/catch and returns an on-screen report. In commonMain so the Android
+ * build verifies it compiles; takes the [koin] instance explicitly (GlobalContext isn't on
+ * the Native Koin API).
  */
-fun startupDiagnosticReport(): String {
+fun startupDiagnosticReport(koin: Koin): String {
     val sb = StringBuilder("Diagnostic (CMP 1.11.1)\n\n")
 
     fun step(name: String, block: suspend () -> Unit) {
@@ -28,8 +28,8 @@ fun startupDiagnosticReport(): String {
         sb.append(line).append("\n\n")
     }
 
-    step("1 Koin -> DataStore read") {
-        val ds = GlobalContext.get().get<DataStore<AppData>>()
+    step("1 DataStore read") {
+        val ds = koin.get<DataStore<AppData>>()
         ds.data.first()
     }
     step("2 Resource getString") {

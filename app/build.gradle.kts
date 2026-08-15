@@ -44,8 +44,10 @@ kotlin {
     }
 
     if (isMacOs) {
+        // Note: iosX64 (Intel-Mac simulator) is intentionally omitted — Compose Multiplatform
+        // 1.11 no longer ships iosX64 artifacts. iosArm64 = devices, iosSimulatorArm64 = the
+        // Apple-Silicon simulator, which is all Codemagic (M-series) and real devices need.
         listOf(
-            iosX64(),
             iosArm64(),
             iosSimulatorArm64(),
         ).forEach { iosTarget ->

@@ -17,8 +17,13 @@ workflows:
     integrations:
       app_store_connect: "Fruit 2048 asc key"
     environment:
+      # Codemagic-managed automatic signing: it creates the distribution certificate +
+      # provisioning profile and stores the private key for reuse (fixes the
+      # "cannot save certificate without private key" error from manual fetching).
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.pp.game2048
       vars:
-        BUNDLE_ID: "com.pp.game2048"
         XCODE_PROJECT: "iosApp/iosApp.xcodeproj"
         XCODE_SCHEME: "iosApp"
       java: 17
@@ -28,17 +33,6 @@ workflows:
       - name: Set build number
         script: |
           /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$CM_BUILD_DIR/iosApp/iosApp/Info.plist"
-      - name: Set up keychain
-        script: keychain initialize
-      - name: Fetch signing files
-        script: |
-          app-store-connect fetch-signing-files "$BUNDLE_ID" \
-            --type IOS_APP_STORE \
-            --create
-      - name: Add certificates to keychain
-        script: keychain add-certificates
-      - name: Apply provisioning profiles to the project
-        script: xcode-project use-profiles
       - name: Build IPA (runs the Kotlin/Native framework build via the Xcode run-script)
         script: |
           xcode-project build-ipa \

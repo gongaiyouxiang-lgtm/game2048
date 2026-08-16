@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		A1F0000000000000000001 /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000001 /* iOSApp.swift */; };
-		A1F0000000000000000002 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000002 /* ContentView.swift */; };
 		A1F0000000000000000003 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000003 /* Assets.xcassets */; };
 		A1F0000000000000000004 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000004 /* Preview Assets.xcassets */; };
 		A1F0000000000000000011 /* click.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000011 /* click.mp3 */; };
@@ -16,12 +15,19 @@
 		A1F0000000000000000013 /* merge.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000013 /* merge.mp3 */; };
 		A1F0000000000000000014 /* slide.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000014 /* slide.mp3 */; };
 		A1F0000000000000000015 /* win.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000015 /* win.mp3 */; };
+		A1F0000000000000000020 /* GameLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000020 /* GameLogic.swift */; };
+		A1F0000000000000000021 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000021 /* Theme.swift */; };
+		A1F0000000000000000022 /* GameStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000022 /* GameStore.swift */; };
+		A1F0000000000000000023 /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000023 /* Localization.swift */; };
+		A1F0000000000000000024 /* SoundManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000024 /* SoundManager.swift */; };
+		A1F0000000000000000025 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000025 /* GameView.swift */; };
+		A1F0000000000000000026 /* LandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000026 /* LandingView.swift */; };
+		A1F0000000000000000027 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000027 /* SettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		B2F0000000000000000000 /* iosApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iosApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2F0000000000000000001 /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
-		B2F0000000000000000002 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		B2F0000000000000000003 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B2F0000000000000000004 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		B2F0000000000000000005 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -30,6 +36,14 @@
 		B2F0000000000000000013 /* merge.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = merge.mp3; sourceTree = "<group>"; };
 		B2F0000000000000000014 /* slide.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = slide.mp3; sourceTree = "<group>"; };
 		B2F0000000000000000015 /* win.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = win.mp3; sourceTree = "<group>"; };
+		B2F0000000000000000020 /* GameLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameLogic.swift; sourceTree = "<group>"; };
+		B2F0000000000000000021 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		B2F0000000000000000022 /* GameStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStore.swift; sourceTree = "<group>"; };
+		B2F0000000000000000023 /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
+		B2F0000000000000000024 /* SoundManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundManager.swift; sourceTree = "<group>"; };
+		B2F0000000000000000025 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
+		B2F0000000000000000026 /* LandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingView.swift; sourceTree = "<group>"; };
+		B2F0000000000000000027 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +69,8 @@
 			isa = PBXGroup;
 			children = (
 				B2F0000000000000000001 /* iOSApp.swift */,
-				B2F0000000000000000002 /* ContentView.swift */,
+				C3F0000000000000000005 /* Game */,
+				C3F0000000000000000006 /* Views */,
 				B2F0000000000000000003 /* Assets.xcassets */,
 				B2F0000000000000000005 /* Info.plist */,
 				C3F0000000000000000004 /* Resources */,
@@ -92,6 +107,28 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		C3F0000000000000000005 /* Game */ = {
+			isa = PBXGroup;
+			children = (
+				B2F0000000000000000020 /* GameLogic.swift */,
+				B2F0000000000000000021 /* Theme.swift */,
+				B2F0000000000000000022 /* GameStore.swift */,
+				B2F0000000000000000023 /* Localization.swift */,
+				B2F0000000000000000024 /* SoundManager.swift */,
+			);
+			path = Game;
+			sourceTree = "<group>";
+		};
+		C3F0000000000000000006 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				B2F0000000000000000025 /* GameView.swift */,
+				B2F0000000000000000026 /* LandingView.swift */,
+				B2F0000000000000000027 /* SettingsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -99,7 +136,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 07F0000000000000000002 /* Build configuration list for PBXNativeTarget "iosApp" */;
 			buildPhases = (
-				F6F0000000000000000004 /* Compile Kotlin Framework */,
 				F6F0000000000000000001 /* Sources */,
 				F6F0000000000000000002 /* Frameworks */,
 				F6F0000000000000000003 /* Resources */,
@@ -163,35 +199,20 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		F6F0000000000000000004 /* Compile Kotlin Framework */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Compile Kotlin Framework";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "cd \"$SRCROOT/..\"\n./gradlew :app:embedAndSignAppleFrameworkForXcode\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		F6F0000000000000000001 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A1F0000000000000000002 /* ContentView.swift in Sources */,
 				A1F0000000000000000001 /* iOSApp.swift in Sources */,
+				A1F0000000000000000020 /* GameLogic.swift in Sources */,
+				A1F0000000000000000021 /* Theme.swift in Sources */,
+				A1F0000000000000000022 /* GameStore.swift in Sources */,
+				A1F0000000000000000023 /* Localization.swift in Sources */,
+				A1F0000000000000000024 /* SoundManager.swift in Sources */,
+				A1F0000000000000000025 /* GameView.swift in Sources */,
+				A1F0000000000000000026 /* LandingView.swift in Sources */,
+				A1F0000000000000000027 /* SettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,7 +230,6 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -218,7 +238,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -239,10 +259,9 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -263,14 +282,10 @@
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				DEVELOPMENT_TEAM = CT74FP5R99;
 				ENABLE_PREVIEWS = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/../app/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
-				);
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = iosApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -295,14 +310,10 @@
 				DEVELOPMENT_ASSET_PATHS = "\"iosApp/Preview Content\"";
 				DEVELOPMENT_TEAM = CT74FP5R99;
 				ENABLE_PREVIEWS = YES;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(SRCROOT)/../app/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
-				);
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = iosApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

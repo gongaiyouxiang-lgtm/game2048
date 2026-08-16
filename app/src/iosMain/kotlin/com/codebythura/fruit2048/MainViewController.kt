@@ -1,15 +1,24 @@
 package com.codebythura.fruit2048
 
-import platform.UIKit.UIColor
+import androidx.compose.ui.window.ComposeUIViewController
+import com.codebythura.fruit2048.di.initKoin
+import com.codebythura.fruit2048.di.platformModule
+import com.codebythura.fruit2048.ui.Fruit2048
+import com.codebythura.fruit2048.ui.theme.Fruit2048Theme
 import platform.UIKit.UIViewController
 
-/**
- * TEMPORARY: plain UIKit (no Compose) through the CURRENT scene-based lifecycle + dynamic
- * framework. Green => the scene setup and dynamic framework are fine and Compose is the sole
- * problem. Crash => my recent scene/framework changes broke launch (not Compose).
- */
+// Start Koin exactly once, the first time the Compose view controller is created.
+private val koinStarted: Unit by lazy {
+    initKoin(platformModule)
+    Unit
+}
+
+/** Entry point the Swift `iosApp` embeds via a UIKit SceneDelegate root. */
 fun MainViewController(): UIViewController {
-    val controller = UIViewController()
-    controller.view.backgroundColor = UIColor(red = 0.05, green = 0.6, blue = 0.25, alpha = 1.0)
-    return controller
+    koinStarted
+    return ComposeUIViewController {
+        Fruit2048Theme {
+            Fruit2048()
+        }
+    }
 }

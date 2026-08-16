@@ -59,35 +59,36 @@ final class GameLogic: ObservableObject {
         persist()
     }
 
-    /// Returns true if the board changed (a real move happened).
+    /// Returns true if the board changed (a real move happened — a slide OR a merge).
     @discardableResult
     func move(_ dir: Direction) -> Bool {
         let snapshot = tiles
         let snapshotScore = score
+        let before = valueLayout(tiles)
 
         // Clear per-move flags.
         for i in tiles.indices { tiles[i].isNew = false; tiles[i].mergedThisMove = false }
 
         var grid = makeGrid()
         var gained = 0
-        var moved = false
 
         for line in 0..<size {
-            var values = extractLine(grid, line: line, dir: dir)
-            let (merged, points, changed) = Self.collapse(values)
-            values = merged
+            let values = extractLine(grid, line: line, dir: dir)
+            let (merged, points, _) = Self.collapse(values)
             gained += points
-            if changed { moved = true }
-            writeLine(&grid, line: line, dir: dir, tiles: values)
+            writeLine(&grid, line: line, dir: dir, tiles: merged)
         }
 
-        if !moved { return false }
+        let newTiles = grid.compactMap { $0 }
+        // A move counts if any cell's value changed position or merged. Comparing the
+        // value layout catches pure slides (into empty cells) as well as merges.
+        if valueLayout(newTiles) == before { return false }
 
         undoStack.append((snapshot, snapshotScore))
         if undoStack.count > 20 { undoStack.removeFirst() }
         canUndo = true
 
-        tiles = grid.compactMap { $0 }
+        tiles = newTiles
         score += gained
         if score > bestScore { bestScore = score; store.bestScore = score }
         if !reachedGoal && tiles.contains(where: { $0.value >= 2048 }) { reachedGoal = true }
@@ -105,6 +106,14 @@ final class GameLogic: ObservableObject {
         var grid = [Tile?](repeating: nil, count: size * size)
         for t in tiles { grid[t.row * size + t.col] = t }
         return grid
+    }
+
+    /// Row-major grid of tile VALUES (0 = empty). Used to tell whether a move
+    /// actually changed the board (positions or merges), independent of tile ids.
+    private func valueLayout(_ tiles: [Tile]) -> [Int] {
+        var g = [Int](repeating: 0, count: size * size)
+        for t in tiles { g[t.row * size + t.col] = t.value }
+        return g
     }
 
     /// Extract one row/column in the direction of travel (index 0 = destination edge).

@@ -14,6 +14,8 @@ struct FruitApp: App {
                         switch route {
                         case let .game(size, resume):
                             GameView(size: size, resume: resume)
+                        case .drop:
+                            DropGameView()
                         case .settings:
                             SettingsView()
                         }

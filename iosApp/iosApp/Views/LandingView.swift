@@ -2,6 +2,7 @@ import SwiftUI
 
 enum Route: Hashable {
     case game(size: Int, resume: Bool)
+    case drop
     case settings
 }
 
@@ -81,6 +82,18 @@ struct LandingView: View {
                 }
                 .simultaneousGesture(TapGesture().onEnded { SoundManager.shared.click() })
                 .padding(.horizontal, 24).padding(.top, 22)
+
+                NavigationLink(value: Route.drop) {
+                    Text("Orchard Drop")
+                        .font(.system(size: 17, weight: .heavy)).foregroundColor(.white)
+                        .frame(maxWidth: .infinity).frame(height: 56)
+                        .background(LinearGradient(colors: [Color(hex: 0x34C77B), Color(hex: 0x179A57)],
+                                                   startPoint: .top, endPoint: .bottom))
+                        .clipShape(Capsule())
+                        .shadow(color: Color(hex: 0x179A57).opacity(0.45), radius: 10, y: 4)
+                }
+                .simultaneousGesture(TapGesture().onEnded { SoundManager.shared.click() })
+                .padding(.horizontal, 24).padding(.top, 12)
 
                 if hasSaved {
                     NavigationLink(value: Route.game(size: GameStore.shared.savedGameSize, resume: true)) {

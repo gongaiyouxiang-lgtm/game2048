@@ -23,6 +23,8 @@
 		A1F0000000000000000025 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000025 /* GameView.swift */; };
 		A1F0000000000000000026 /* LandingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000026 /* LandingView.swift */; };
 		A1F0000000000000000027 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000027 /* SettingsView.swift */; };
+		A1F0000000000000000028 /* DropEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000028 /* DropEngine.swift */; };
+		A1F0000000000000000029 /* DropGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2F0000000000000000029 /* DropGameView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +46,8 @@
 		B2F0000000000000000025 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		B2F0000000000000000026 /* LandingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandingView.swift; sourceTree = "<group>"; };
 		B2F0000000000000000027 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		B2F0000000000000000028 /* DropEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropEngine.swift; sourceTree = "<group>"; };
+		B2F0000000000000000029 /* DropGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropGameView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +119,7 @@
 				B2F0000000000000000022 /* GameStore.swift */,
 				B2F0000000000000000023 /* Localization.swift */,
 				B2F0000000000000000024 /* SoundManager.swift */,
+				B2F0000000000000000028 /* DropEngine.swift */,
 			);
 			path = Game;
 			sourceTree = "<group>";
@@ -125,6 +130,7 @@
 				B2F0000000000000000025 /* GameView.swift */,
 				B2F0000000000000000026 /* LandingView.swift */,
 				B2F0000000000000000027 /* SettingsView.swift */,
+				B2F0000000000000000029 /* DropGameView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -213,6 +219,8 @@
 				A1F0000000000000000025 /* GameView.swift in Sources */,
 				A1F0000000000000000026 /* LandingView.swift in Sources */,
 				A1F0000000000000000027 /* SettingsView.swift in Sources */,
+				A1F0000000000000000028 /* DropEngine.swift in Sources */,
+				A1F0000000000000000029 /* DropGameView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

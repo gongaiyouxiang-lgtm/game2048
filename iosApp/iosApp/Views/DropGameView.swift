@@ -58,7 +58,7 @@ struct DropGameView: View {
                 Text("←").font(.system(size: 22, weight: .bold)).foregroundColor(.white)
             }
             Spacer()
-            Text("Orchard Drop")
+            Text("Tipsy Orchard")
                 .font(.system(size: 20, weight: .heavy))
                 .foregroundColor(.white)
             Spacer()

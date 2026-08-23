@@ -33,9 +33,13 @@ enum L: String {
     case startGame, continueGame, back, settings, sound, vibration
     case about, version, audioHaptics, appearance, language
     case difficulty, easy, normal, hard
+    case tagline, play, classicMode
 
     static let table: [L: [AppLanguage: String]] = [
-        .titleSubtitle:  [.en: "Fruit Edition!", .zhTW: "水果版！", .zhCN: "水果版！"],
+        .titleSubtitle:  [.en: "Classic Slide", .zhTW: "經典滑動", .zhCN: "经典滑动"],
+        .tagline:        [.en: "Tilt · Drop · Merge", .zhTW: "傾斜 · 掉落 · 合併", .zhCN: "倾斜 · 掉落 · 合并"],
+        .play:           [.en: "Play", .zhTW: "開始遊戲", .zhCN: "开始游戏"],
+        .classicMode:    [.en: "ALSO INCLUDED", .zhTW: "另附模式", .zhCN: "另附模式"],
         .bestScore:      [.en: "Best Score", .zhTW: "最高分", .zhCN: "最高分"],
         .currentScore:   [.en: "Current Score", .zhTW: "目前分數", .zhCN: "当前分数"],
         .newGame:        [.en: "New Game", .zhTW: "新遊戲", .zhCN: "新游戏"],

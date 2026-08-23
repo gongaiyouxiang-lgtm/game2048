@@ -42,8 +42,7 @@ struct GameView: View {
             }
 
             HStack(alignment: .firstTextBaseline, spacing: 6) {
-                Text("2048").font(.system(size: 40, weight: .heavy)).foregroundColor(Theme.primary)
-                Text(lang.t(.titleSubtitle)).font(.system(size: 15, weight: .bold)).foregroundColor(Color(hex: 0xEC4899))
+                Text(lang.t(.titleSubtitle)).font(.system(size: 28, weight: .heavy)).foregroundColor(Theme.primary)
                 Spacer()
             }
 

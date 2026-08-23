@@ -39,18 +39,41 @@ struct LandingView: View {
                 Spacer()
 
                 Text("🍉🍓🍌🍇🍑").font(.system(size: 46))
-                Text("2048")
-                    .font(.system(size: 96, weight: .black))
+                Text("Tipsy Orchard")
+                    .font(.system(size: 54, weight: .black))
                     .foregroundStyle(LinearGradient(colors: [Color(hex: 0x6DB33F), Color(hex: 0xEFC94A), Color(hex: 0xE8792C), Color(hex: 0x8A46E0)], startPoint: .leading, endPoint: .trailing))
-                Text("Fruit Edition").font(.system(size: 34, weight: .heavy)).foregroundColor(Color(hex: 0x2B2B2B))
+                    .lineLimit(1).minimumScaleFactor(0.6)
+                    .padding(.horizontal, 16)
+                Text(lang.t(.tagline))
+                    .font(.system(size: 17, weight: .bold))
+                    .foregroundColor(Color(hex: 0x5B5B64))
 
                 Spacer()
 
-                Text(lang.t(.difficulty)).font(.system(size: 13, weight: .bold))
-                    .foregroundColor(Theme.primary).frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.leading, 30).padding(.bottom, 8)
+                // Primary game: the falling-and-tilting hybrid.
+                NavigationLink(value: Route.drop) {
+                    Text("\u{25B6}  " + lang.t(.play))
+                        .font(.system(size: 21, weight: .heavy)).foregroundColor(.white)
+                        .frame(maxWidth: .infinity).frame(height: 66)
+                        .background(LinearGradient(colors: [Color(hex: 0x34C77B), Color(hex: 0x179A57)],
+                                                   startPoint: .top, endPoint: .bottom))
+                        .clipShape(Capsule())
+                        .shadow(color: Color(hex: 0x179A57).opacity(0.5), radius: 12, y: 4)
+                }
+                .simultaneousGesture(TapGesture().onEnded { SoundManager.shared.click() })
+                .padding(.horizontal, 24)
 
-                HStack(spacing: 6) {
+                // Secondary: the classic sliding game, kept as bonus content.
+                Text(lang.t(.classicMode))
+                    .font(.system(size: 11, weight: .heavy))
+                    .foregroundColor(Color(hex: 0x9A9AA2))
+                    .padding(.top, 28)
+                Text(lang.t(.titleSubtitle))
+                    .font(.system(size: 17, weight: .heavy))
+                    .foregroundColor(Color(hex: 0x3A3A42))
+                    .padding(.top, 2)
+
+                HStack(spacing: 5) {
                     ForEach(options, id: \.size) { opt in
                         let sel = difficulty == opt.size
                         Button {
@@ -58,53 +81,38 @@ struct LandingView: View {
                             difficulty = opt.size
                             GameStore.shared.difficulty = opt.size
                         } label: {
-                            VStack(spacing: 2) {
-                                Text(lang.t(opt.label)).font(.system(size: 15, weight: .bold))
-                                    .foregroundColor(sel ? .white : Color(hex: 0x1C1B1F))
-                                Text("\(opt.size)×\(opt.size)").font(.system(size: 12))
-                                    .foregroundColor(sel ? .white.opacity(0.9) : Color(hex: 0x6B6B70))
-                            }
-                            .frame(maxWidth: .infinity).padding(.vertical, 12)
-                            .background(sel ? AnyView(Theme.blueButton) : AnyView(Color.clear))
-                            .cornerRadius(15)
+                            Text(lang.t(opt.label) + "  \(opt.size)\u{00D7}\(opt.size)")
+                                .font(.system(size: 12, weight: .bold))
+                                .foregroundColor(sel ? .white : Color(hex: 0x1C1B1F))
+                                .frame(maxWidth: .infinity).padding(.vertical, 9)
+                                .background(sel ? AnyView(Theme.blueButton) : AnyView(Color.clear))
+                                .cornerRadius(12)
                         }
                     }
                 }
-                .padding(6).background(Color.white).cornerRadius(20).shadow(radius: 6)
-                .padding(.horizontal, 24)
+                .padding(5).background(Color.white).cornerRadius(16).shadow(radius: 4)
+                .padding(.horizontal, 24).padding(.top, 8)
 
-                NavigationLink(value: Route.game(size: difficulty, resume: false)) {
-                    Text("▶  " + lang.t(.startGame))
-                        .font(.system(size: 19, weight: .heavy)).foregroundColor(.white)
-                        .frame(maxWidth: .infinity).frame(height: 64)
-                        .background(Theme.blueButton).clipShape(Capsule())
-                        .shadow(color: Theme.primary.opacity(0.5), radius: 12, y: 4)
-                }
-                .simultaneousGesture(TapGesture().onEnded { SoundManager.shared.click() })
-                .padding(.horizontal, 24).padding(.top, 22)
-
-                NavigationLink(value: Route.drop) {
-                    Text("Orchard Drop")
-                        .font(.system(size: 17, weight: .heavy)).foregroundColor(.white)
-                        .frame(maxWidth: .infinity).frame(height: 56)
-                        .background(LinearGradient(colors: [Color(hex: 0x34C77B), Color(hex: 0x179A57)],
-                                                   startPoint: .top, endPoint: .bottom))
-                        .clipShape(Capsule())
-                        .shadow(color: Color(hex: 0x179A57).opacity(0.45), radius: 10, y: 4)
-                }
-                .simultaneousGesture(TapGesture().onEnded { SoundManager.shared.click() })
-                .padding(.horizontal, 24).padding(.top, 12)
-
-                if hasSaved {
-                    NavigationLink(value: Route.game(size: GameStore.shared.savedGameSize, resume: true)) {
-                        Text(lang.t(.continueGame))
-                            .font(.system(size: 16, weight: .bold)).foregroundColor(Theme.primary)
-                            .frame(maxWidth: .infinity).frame(height: 50)
-                            .background(Color.white).clipShape(Capsule()).shadow(radius: 6)
+                HStack(spacing: 10) {
+                    NavigationLink(value: Route.game(size: difficulty, resume: false)) {
+                        Text(lang.t(.startGame))
+                            .font(.system(size: 15, weight: .bold)).foregroundColor(Theme.primary)
+                            .frame(maxWidth: .infinity).frame(height: 48)
+                            .background(Color.white).clipShape(Capsule()).shadow(radius: 5)
                     }
                     .simultaneousGesture(TapGesture().onEnded { SoundManager.shared.click() })
-                    .padding(.horizontal, 24).padding(.top, 12)
+
+                    if hasSaved {
+                        NavigationLink(value: Route.game(size: GameStore.shared.savedGameSize, resume: true)) {
+                            Text(lang.t(.continueGame))
+                                .font(.system(size: 15, weight: .bold)).foregroundColor(Theme.primary)
+                                .frame(maxWidth: .infinity).frame(height: 48)
+                                .background(Color.white).clipShape(Capsule()).shadow(radius: 5)
+                        }
+                        .simultaneousGesture(TapGesture().onEnded { SoundManager.shared.click() })
+                    }
                 }
+                .padding(.horizontal, 24).padding(.top, 8)
 
                 Spacer()
             }
